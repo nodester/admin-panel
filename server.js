@@ -109,7 +109,7 @@ app.get('/', checkAuth, function(req, res){
 // Need to write paths to all ndoester APIs
 // including GET and POST - done
 // Need to figure out REGEX - done
-app.all(/(.*)\/*/, checkAuth, function(req, res, next){
+app.all(new RegExp("(.*)\/*"), checkAuth, function(req, res, next){
 	var params = "";
 	// based on verb, get params
 	if(req.method == "GET") {
