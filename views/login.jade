@@ -1,0 +1,11 @@
+form(method="post",action="/login")
+  fieldset
+    legend Login
+    p
+      label(for="user[user]") Username:
+        input(type="text", name="user[user]")
+    p
+      label(for="user[pass]") Password:
+        input(type="text", name="user[pass]")
+    p.buttons
+        input(type="submit", value="Save")
