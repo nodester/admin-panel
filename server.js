@@ -78,7 +78,7 @@ app.post('/login',checkAuth, function(req,res) {
 		};
 		console.log("body ==> ",req.body);
 		// authenticate user
-		req.authenticate(['awesomeauth'], function(err, authenticated) {
+		req.authenticate('awesomeauth', function(err, authenticated) {
 			console.log("auth it");
 			if(authenticated) {
 				// set session
@@ -90,7 +90,7 @@ app.post('/login',checkAuth, function(req,res) {
 				console.log("failed");
 				res.redirect("/login");
 			}
-	  });	
+	  });
 	}
 });
 

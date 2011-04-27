@@ -3,6 +3,7 @@ var http = require('http'),
 
 // Generate Query parameters from params(json)
 function generateQueryParams(params) {
+	console.log('generating params');
   tail = [];
   for (var p in params) {
     if (params.hasOwnProperty(p)) {
