@@ -1,0 +1,15 @@
+{
+    "name": "admin",
+    "description": "admin interface for Nodester api",
+    "version": "0.1",
+    "author": "Micheal <micheal@visionmasterdesigns.com>",
+    "repository": "git://github.com/rowoot/nodester-admin.git",
+    "dependencies": {
+        "express": ">= 2.3.1",
+        "jade": ">= 0.10.5",
+        "connect-auth" : ">0.2.2"
+    },
+    "engines": {
+        "node": ">= 0.4.0"
+    }
+}
