@@ -1,9 +1,19 @@
 (function($) {
 	$(document).ready(function() {
+	  var $loader = $("#loader"),
+	      $tree = $(".tree");
+	  $loader.fadeOut('fast');
 		$("a[rel='ajax']").click(function(e) {
-			e.preventDefault();
-			var href = $(this).attr("href");
-			$.ajax({
+			e.preventDefault(); // prevent defailt
+			var $this = $(this),
+			    href = $this.attr("href"); // get href
+			
+			$(".lnav .active").removeClass("active"); //remove active class
+			$this.addClass("active"); // add active class
+			$tree.fadeOut('fast', function() {
+			  $loader.fadeIn('fast'); // show loader
+			});
+			$.ajax({			  
 				url:href,
 				success:function(r) {
 					var keys = getKeys(r[0]),
@@ -19,7 +29,9 @@
 				  }
 					// replace sub with new  
 					apps_template = apps_template.replace(/--sub--/i, template);
-					$(".tree").html(["<thead><tr>",header_template,"</tr></thead>","<tbody>", Mustache.to_html(apps_template, view),"</tbody>"].join(""));
+					$loader.fadeOut('fast', function() {
+					  $tree.html(["<thead><tr>",header_template,"</tr></thead>","<tbody>", Mustache.to_html(apps_template, view),"</tbody>"].join("")).fadeIn("fast");
+					}); // hide loader
 				}
 			});
 		});

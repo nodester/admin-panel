@@ -90,8 +90,9 @@ ul.lnav li a {
   text-decoration:none;
 }
 
-ul.lnav li a:hover {
-  background:#ccc;
+ul.lnav li a:hover,
+ul.lnav li a.active {
+  background:#bbb;
 }
 
 .content {
