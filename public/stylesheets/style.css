@@ -61,6 +61,7 @@ a {
 
 #content_wrapper {
   padding-top:1.4em;
+  min-height:250px;
 }
 
 .sidebar {
@@ -199,4 +200,14 @@ p#incomplete {
   color: #484848;
   border-bottom: 1px solid #E1E1E1;
   text-align:center;
+}
+
+footer {
+  font-size:12px;
+}
+
+footer p {
+  margin:0;
+  padding:0;
+  line-height:1.4em;
 }

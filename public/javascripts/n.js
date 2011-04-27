@@ -34,17 +34,21 @@
 					    header_template = "";
 					// run across keys from api
 					for(var i=0;i<len;i++) {
+					  // create table rows
 					  template += ["<td>{{",keys[i],"}}</td>"].join("");
+					  // create table header row
 					  header_template += ["<th>",keys[i],"</th>"].join("");
 				  }
 					// replace sub with new  
 					apps_template = apps_template.replace(/--sub--/i, template);
+					// hide loader, but show table
 					$loader.fadeOut('fast', function() {
 					  $tree.html(["<thead><tr>",header_template,"</tr></thead>","<tbody>", Mustache.to_html(apps_template, view),"</tbody>"].join("")).fadeIn("fast");
 					}); // hide loader
 				}
 			});
 		});
+		// trigger my_apps
 		$("#my_apps").trigger("click");
 		
 	}); // end doc ready
