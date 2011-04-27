@@ -109,7 +109,7 @@ app.get('/', checkAuth, function(req, res){
 // Need to write paths to all ndoester APIs
 // including GET and POST - done
 // Need to figure out REGEX - done
-app.all(new RegExp("(.*)\/*"), checkAuth, function(req, res, next){
+app.all("/api/*", checkAuth, function(req, res, next){
 	var params = "";
 	// based on verb, get params
 	if(req.method == "GET") {
@@ -122,7 +122,7 @@ app.all(new RegExp("(.*)\/*"), checkAuth, function(req, res, next){
 	console.log("query ==> ",req.query);
 	console.log("params ==> ",req.params);
 	
-	nodester.request("GET", req.params, params, req.user,function(data) {
+	nodester.request("GET", req.params[0], params, req.user,function(data) {
 		res.header('Content-Type', 'application/json');
 		console.log(typeof(data),data);
 		res.end(data);

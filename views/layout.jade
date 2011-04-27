@@ -3,8 +3,18 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body!= body
+  body
+    h1 Admin Panel
+    p 
+      a(href="/logout") Logout
   
-  
+    #content_wrapper
+      .content.fr
+        != body
+      .sidebar.fl
+        != partial("sidebar")
+      .cl
   
   script(src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")
+  script(src="/javascripts/mu.js")
+  script(src="/javascripts/n.js")

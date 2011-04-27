@@ -6,3 +6,31 @@ body {
 a {
   color: #00B7FF;
 }
+
+.fr {
+	float:right;
+}
+
+.fl {
+	float:left;
+}
+
+.oh {
+	overflow:hidden;
+}
+
+.cl {
+	clear:both;
+}
+
+#content_wrapper {
+	width:600px;
+}
+
+.sidebar {
+	width:200px;
+}
+
+.content {
+	width:390px;
+}

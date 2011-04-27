@@ -17,7 +17,7 @@ function generateQueryParams(params) {
 
 // Proxy to api.nodester.com 
 function request(method, path, data, credentials, callback) {
-	var formattedPath =  path + generateQueryParams(data);
+	var formattedPath =  "/" + path + generateQueryParams(data);
 	console.log("formatted path ===> ", formattedPath);
 	var options = {
 	  host: 'api.nodester.com',
