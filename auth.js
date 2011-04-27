@@ -1,7 +1,7 @@
-exports.auth = function(options) {
+function check_auth(options) {
   options= options || {};
   var auth= {};
-	// my auth name
+	// Authentication Lib name
   auth.name     = options.name || "awesomeauth";
 	
 	// validate_creds
@@ -25,4 +25,7 @@ exports.auth = function(options) {
   }
 
   return auth;
-};
+}
+
+
+exports.auth = check_auth;

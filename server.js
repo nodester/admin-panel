@@ -1,8 +1,7 @@
-var http = require('http'),
-		express = require('express'),
-		encode = require("./encoding"),
+var express = require('express'),
 		cauth= require('connect-auth'),
-		auth = require('./auth');
+		auth = require('./auth'),
+		nodester = require('./nodester-api');
 
 var app = module.exports = express.createServer();
 
@@ -42,8 +41,8 @@ function checkAuth(req,res,next) {
 	} else {
 		console.log('to session');
 		req.user = {
-			user: "123",
-			password: "bar"
+			user: "rowoot",
+			password: "hackerro"
 		};
 		// store to session
 		req.session.cred = req.user;
@@ -72,58 +71,28 @@ app.get('/', checkAuth, function(req, res){
 });
 
 // Need to write paths to all ndoester APIs
-// including GET and POST
-// Need to figure out REGEX
-app.get('/:path', function(req, res, next){
+// including GET and POST - done
+// Need to figure out REGEX - done
+app.all(/(.*)\/*/, function(req, res, next){
+	var params = "";
+	// based on verb, get params
+	if(req.method == "GET") {
+		params = req.query;
+	} else {
+		params = req.body;
+	}
+	
 	console.log("body ==> ",req.body);
 	console.log("query ==> ",req.query);
 	console.log("params ==> ",req.params);
 	
-	proxyToNodester("GET", req.params.path, req.query, function(data) {
-		res.header('Content-Type', 'text/plain');
+	nodester.request("GET", req.params, params, {user:"rowoot1",pass:"hackerro"},function(data) {
+		res.header('Content-Type', 'application/json');
+		console.log(typeof(data),data);
 		res.end(data);
 	});
 	
 });
-
-// Generate Query parameters from params(json)
-function generateQueryParams(params) {
-  tail = [];
-  for (var p in params) {
-    if (params.hasOwnProperty(p)) {
-      tail.push(p + "=" + encodeURIComponent(params[p]));
-    }
-  }
-	if(tail.length > 0)
-  	return "?" + tail.join("&");
-	else
-		return "";
-}
-
-// Proxy to api.nodester.com 
-function proxyToNodester(method, path, data, callback) {
-	var formattedPath = "/" + path + generateQueryParams(data);
-	console.log("formatted path ===> ", formattedPath);
-	var options = {
-	  host: 'api.nodester.com',
-	  port: 80,
-	  path: formattedPath,
-		headers: {"Authorization" : "Basic " + encode.base64("rowoot:hackerro")},
-		method: method
-	};
-	
-	var req = http.request(options, function(res) {
-	  console.log('STATUS: ' + res.statusCode);
-	  console.log('HEADERS: ' + JSON.stringify(res.headers));
-	  res.setEncoding('utf8');
-	  res.on('data', function (chunk) {
-	    //console.log('BODY: ' + chunk);
-			if(typeof(callback) == "function")
-				callback(chunk);
-	  });
-	});
-	req.end();
-}
 
 // Only listen on $ node app.js
 if (!module.parent) {
