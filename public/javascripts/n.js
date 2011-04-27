@@ -1,28 +1,38 @@
 (function($) {
+  // on ready
 	$(document).ready(function() {
+	  // cache some doms
 	  var $loader = $("#loader"),
 	      $tree = $(".tree");
 	  // default load
 		$("a[rel='ajax']").click(function(e) {
 			e.preventDefault(); // prevent defailt
+			// cache some more
 			var $this = $(this),
 			    href = $this.attr("href"); // get href
-			
-			$(".lnav .active").removeClass("active"); //remove active class
-			$this.addClass("active"); // add active class
+			//remove active class
+			$(".lnav .active").removeClass("active"); 
+			// add active class
+			$this.addClass("active"); 
+			// fadeout tree
 			$tree.fadeOut('fast', function() {
-			  $loader.fadeIn('fast'); // show loader
+			  // show loader
+			  $loader.fadeIn('fast');
 			});
+			// ajax
 			$.ajax({			  
 				url:href,
 				success:function(r) {
+				  if(r.status)
+				    return;
+				  // init vars
 					var keys = getKeys(r[0]),
 					    len = keys.length,
 					    template = "",
 					    view = {items:r},
 					    apps_template = "{{#items}}<tr>--sub--</tr>{{/items}}",
 					    header_template = "";
-					// run across array
+					// run across keys from api
 					for(var i=0;i<len;i++) {
 					  template += ["<td>{{",keys[i],"}}</td>"].join("");
 					  header_template += ["<th>",keys[i],"</th>"].join("");

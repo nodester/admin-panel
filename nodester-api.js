@@ -49,8 +49,9 @@ function request(method, path, data, credentials, callback) {
 	  console.log('HEADERS: ' + JSON.stringify(res.headers));
 	  res.setEncoding('utf8');
 		res.on('data', function (chunk) {
-			if(typeof(callback) == "function")
+			if(typeof(callback) == "function") {
 				callback(chunk);
+			}
 	  });
 	});
 	req.end();

@@ -135,10 +135,9 @@ app.all("/api/*", checkAuth, function(req, res, next){
 	}
 
 	// method, api path, data, credentials, callback
-	nodester.request("GET", req.params[0], params, req.user.creds,function(data) {
+	nodester.request("GET", req.params[0], params, req.user.creds,function(response) {
 		res.header('Content-Type', 'application/json');
-		console.log(typeof(data),data);
-		res.end(data);
+		res.end(response);
 	});
 	
 });
