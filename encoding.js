@@ -109,3 +109,4 @@ function decodeBase64(str){
 }
 
 exports.base64 = encodeBase64;
+exports.dbase64 = decodeBase64;

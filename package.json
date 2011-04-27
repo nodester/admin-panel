@@ -1,6 +1,6 @@
 {
   "author": "rowoot",
-  "name": "admin",
+  "name": "nodester_admin",
   "version": "0.0.1",
   "repository": {
     "type": "git",
@@ -14,5 +14,9 @@
     "node": "0.4.7"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js"
+  },
+  "description": "admin interface for nodester"
 }

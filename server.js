@@ -86,7 +86,10 @@ app.post('/login',checkAuth, function(req,res, next) {
     }
 	  
 	  // encode username and password in base64
-		req.user = encode.base64(req.body.user.user + ":" + req.body.user.pass);
+		req.user = {
+		  creds:encode.base64(req.body.user.user + ":" + req.body.user.pass),
+		  user:req.body.user.user
+	  }
 		
 		// authenticate user
 		req.authenticate('awesomeauth', function(err, authenticated) {
@@ -114,7 +117,8 @@ app.get('/', checkAuth, function(req, res){
 	else
 		res.render('index', {
     	title: 'Home | Nodester Admin Panel',
-    	is_logged: req.is_logged
+    	is_logged: req.is_logged,
+    	user: req.user.user
   	});
 });
 
@@ -131,7 +135,7 @@ app.all("/api/*", checkAuth, function(req, res, next){
 	}
 
 	// method, api path, data, credentials, callback
-	nodester.request("GET", req.params[0], params, req.user,function(data) {
+	nodester.request("GET", req.params[0], params, req.user.creds,function(data) {
 		res.header('Content-Type', 'application/json');
 		console.log(typeof(data),data);
 		res.end(data);

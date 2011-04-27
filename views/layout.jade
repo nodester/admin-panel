@@ -6,7 +6,8 @@ html
   body
     h1 Nodester Admin Panel
     - if(is_logged)
-      p 
+      p.log_info
+        | Howdy <strong>#{user}</strong> ! 
         a(href="/logout") Logout
   
     #content_wrapper

@@ -11,9 +11,9 @@ function check_auth(options) {
  	  // method, api path, data, credentials, callback
  	  console.log("nodester ==> ", nodester);
  	  // authorize: user
- 	  nodester.authorize(req.user, function(bool) {
+ 	  nodester.authorize(req.user.creds, function(bool) {
  	    if(bool) {
- 	      executionScope.success( {name: req.user.user}, callback )
+ 	      executionScope.success( {}, callback )
  	    } else {
  	      executionScope.fail( callback )
  	    }
