@@ -1,17 +1,18 @@
-form(method="post",action="/login")
-  fieldset
-    legend Login
-    p
-      label(for="user[user]") 
-        span.label Username:
-        input(type:"text", name:"user[user]", class:"input r5 " + ((action) ? "error" : ""))
-    p
-      label(for="user[pass]")
-        span.label Password:
-        input(type:"password", name:"user[pass]", class:"input r5 " + ((action) ? "error" : ""))
-    p.buttons
-        input.submit.r5.bluegrad(type="submit", value="Login")
-    -if(action == "failed")
-      p#failed.msg.r5 Authorization Failed ! Do you have an account ?
-    -else if(action == "incomplete")
-      p#incomplete.msg.r5 Either username or password was blank.
+.login_wrap
+  form(method="post",action="/login")
+    fieldset
+      legend Login
+      p
+        label(for="user[user]") 
+          span.label Username:
+          input(type:"text", name:"user[user]", class:"input r5 " + ((action) ? "error" : ""))
+      p
+        label(for="user[pass]")
+          span.label Password:
+          input(type:"password", name:"user[pass]", class:"input r5 " + ((action) ? "error" : ""))
+      p.buttons
+          input.submit.r5.bluegrad(type="submit", value="Login")
+      -if(action == "failed")
+        p#failed.msg.r5 Authorization Failed ! Do you have an account ?
+      -else if(action == "incomplete")
+        p#incomplete.msg.r5 Either username or password was blank.

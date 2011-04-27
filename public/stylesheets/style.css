@@ -95,9 +95,9 @@ ul.lnav li a.active {
   background:#bbb;
 }
 
-.content {
+.login_wrap {
+  width:420px;
 }
-
 
 span.label {
   display:block;
