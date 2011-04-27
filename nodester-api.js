@@ -1,6 +1,12 @@
 var http = require('http'),
 		encode = require("./encoding");
 
+// default functions
+var options = {
+  host: 'api.nodester.com',
+  port: 80
+};
+
 // Generate Query parameters from params(json)
 function generateQueryParams(params) {
 	console.log('generating params');
@@ -16,17 +22,27 @@ function generateQueryParams(params) {
 		return "";
 }
 
-// Proxy to api.nodester.com 
+// authorize user
+function authorize(credentials, callback) {
+	// options for credential checkin
+	options.path = "/apps";
+  options.headers = {"Authorization" : "Basic " + credentials};
+	
+	var req = http.request(options, function(res) {
+	  console.log("got it");
+	  (res.statusCode == "200") ? callback(true) : callback(false);
+  });
+  req.end();
+}
+
+// interface to nodester api
 function request(method, path, data, credentials, callback) {
-	var formattedPath =  "/" + path + generateQueryParams(data);
-	console.log("formatted path ===> ", formattedPath);
-	var options = {
-	  host: 'api.nodester.com',
-	  port: 80,
-	  path: formattedPath,
-		headers: {"Authorization" : "Basic " + encode.base64(credentials.user + ":" + credentials.pass)},
-		method: method
-	};
+	var formatted_path =  "/" + path + generateQueryParams(data);
+	console.log("formatted path ===> ", formatted_path);
+	
+	options.path = formatted_path;
+  options.headers = {"Authorization" : "Basic " + credentials};
+	options.method = method;
 	
 	var req = http.request(options, function(res) {
 	  console.log('STATUS: ' + res.statusCode);
@@ -40,4 +56,6 @@ function request(method, path, data, credentials, callback) {
 	req.end();
 }
 
+// Expose Library Methods
 exports.request = request;
+exports.authorize = authorize;

@@ -1,15 +1,18 @@
 {
-    "name": "admin",
-    "description": "admin interface for Nodester api",
-    "version": "0.1",
-    "author": "Micheal <micheal@visionmasterdesigns.com>",
-    "repository": "git://github.com/rowoot/nodester-admin.git",
-    "dependencies": {
-        "express": ">= 2.3.1",
-        "jade": ">= 0.10.5",
-        "connect-auth" : ">0.2.2"
-    },
-    "engines": {
-        "node": ">= 0.4.0"
-    }
+  "author": "rowoot",
+  "name": "admin",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "ec2-user@nodester.com:/node/hosted_apps/rowoot/1498-460f957a53eb6348b7077e2289eb7868.git"
+  },
+  "main": "server.js",
+  "directories": {
+    "lib": "."
+  },
+  "engines": {
+    "node": "0.4.7"
+  },
+  "dependencies": {},
+  "devDependencies": {}
 }

@@ -1,6 +1,7 @@
 var express = require('express'),
 		cauth= require('connect-auth'),
 		auth = require('./auth'),
+		encode = require('./encoding')
 		nodester = require('./nodester-api');
 
 var app = module.exports = express.createServer();
@@ -30,7 +31,7 @@ app.configure('production', function(){
 // Checks whether user has logged in
 // No data store used, just plain cookie based auth
 function checkAuth(req,res,next) {
-	req.lstate = false;
+	req.is_logged = false;
 	// if key=>cred is present in session
 	// then user is logged in
 	// --- Need to write logged in session 
@@ -39,7 +40,7 @@ function checkAuth(req,res,next) {
 		// get from session
 		console.log('logged in');
 		req.user = req.session.cred;
-		req.lstate = true;
+		req.is_logged = true;
 	} else {
 		console.log('not logged in');
 	}
@@ -58,25 +59,35 @@ app.get('/logout',checkAuth, function(req,res) {
 app.get('/login',checkAuth, function(req,res) {
 	// check whether user is logged in ?
 	// then log him out
-	if(req.lstate == true)
+	console.log(req.query);
+	console.log(req.params);
+	console.log(req.body);
+	
+	if(req.is_logged == true)
 		res.redirect("/");
-	else
+  else
 		res.render('login', {
-	    title: 'Login | Nodester Admin Panel'
+	    title: 'Login | Nodester Admin Panel',
+	    is_logged: req.is_logged,
+	    action : req.query.action
 	  });
 });
 
-app.post('/login',checkAuth, function(req,res) {
+app.post('/login',checkAuth, function(req,res, next) {
 	// check whether user is logged in ?
 	// then log him out
-	if(req.lstate == true) {
+	if(req.is_logged == true) {
 		res.redirect('/');
 	} else {
-		req.user = {
-			user: "rowoot",
-			pass: "hackerro"
-		};
-		console.log("body ==> ",req.body);
+	  // redirect back to login page, if anything is missing
+	  if(!req.body.user || req.body.user.user == "" && req.body.user.pass == "") {
+	    res.redirect("/login?action=incomplete");
+	    return;
+    }
+	  
+	  // encode username and password in base64
+		req.user = encode.base64(req.body.user.user + ":" + req.body.user.pass);
+		
 		// authenticate user
 		req.authenticate('awesomeauth', function(err, authenticated) {
 			console.log("auth it");
@@ -88,7 +99,7 @@ app.post('/login',checkAuth, function(req,res) {
 			} else {
 				// don`t set session
 				console.log("failed");
-				res.redirect("/login");
+				res.redirect("/login?action=failed");
 			}
 	  });
 	}
@@ -98,11 +109,12 @@ app.post('/login',checkAuth, function(req,res) {
 // Routes
 app.get('/', checkAuth, function(req, res){
 	// give auth name
-	if(req.lstate == false)
+	if(req.is_logged == false)
 		res.redirect("/login");
 	else
 		res.render('index', {
-    	title: 'Index | Nodester Admin Panel'
+    	title: 'Home | Nodester Admin Panel',
+    	is_logged: req.is_logged
   	});
 });
 
@@ -117,11 +129,8 @@ app.all("/api/*", checkAuth, function(req, res, next){
 	} else {
 		params = req.body;
 	}
-	
-	console.log("body ==> ",req.body);
-	console.log("query ==> ",req.query);
-	console.log("params ==> ",req.params);
-	
+
+	// method, api path, data, credentials, callback
 	nodester.request("GET", req.params[0], params, req.user,function(data) {
 		res.header('Content-Type', 'application/json');
 		console.log(typeof(data),data);

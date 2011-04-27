@@ -4,15 +4,17 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    h1 Admin Panel
-    p 
-      a(href="/logout") Logout
+    h1 Nodester Admin Panel
+    - if(is_logged)
+      p 
+        a(href="/logout") Logout
   
     #content_wrapper
-      .content.fr
+      - if(is_logged)
+        .sidebar.fl
+          != partial("sidebar")
+      .content.fl
         != body
-      .sidebar.fl
-        != partial("sidebar")
       .cl
   
   script(src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")

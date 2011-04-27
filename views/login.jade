@@ -2,10 +2,12 @@ form(method="post",action="/login")
   fieldset
     legend Login
     p
-      label(for="user[user]") Username:
-        input(type="text", name="user[user]")
+      label(for="user[user]") 
+        span.label Username:
+        input(type:"text", name:"user[user]", class:"input " + (action == "incomplete" ? "error" : ""))
     p
-      label(for="user[pass]") Password:
-        input(type="text", name="user[pass]")
+      label(for="user[pass]")
+        span.label Password:
+        input(type:"password", name:"user[pass]", class:"input " + (action == "incomplete" ? "error" : ""))
     p.buttons
-        input(type="submit", value="Save")
+        input.submit(type="submit", value="Login")

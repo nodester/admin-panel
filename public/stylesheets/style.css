@@ -1,7 +1,10 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  color:#3b3b3b;
 }
+
+*:focus {outline: none;}
 
 a {
   color: #00B7FF;
@@ -33,4 +36,44 @@ a {
 
 .content {
 	width:390px;
+}
+
+
+span.label {
+  display:block;
+}
+
+fieldset {
+  border:1px solid #ddd;
+  padding:5px 0 5px 20px;
+}
+
+.input {
+  border:1px solid #ccc;
+  font-size:16px;
+  padding:5px;
+  -moz-box-shadow: -2px 2px 4px rgba(0,0,0,0.1) inset;
+  -webkit-box-shadow: 2px 2px 4px rgba(0,0,0,0.1) inset inset;
+  -o-box-shadow: 2px 2px 4px rgba(0,0,0,0.1) inset inset;
+  box-shadow: -2px 2px 4px rgba(0,0,0,0.1) inset;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+input.error {
+  border:1px solid firebrick;
+}
+
+.submit {
+  font-size:12px;
+  font-weight:700;
+  padding:5px 10px;
+  background:firebrick;
+  color:#fff;
+  border:0;
+  text-shadow:0 -1px 1px rgba(0,0,0,0.3);
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
 }
