@@ -186,6 +186,14 @@ p#incomplete {
   width:100%;
 }
 
+.tree th {
+  font-weight: normal;
+  background-color: #EAEAEA;
+  color: #999;
+  padding: .5em .3em;
+  border-bottom: 1px solid #D8D8D8;
+}
+
 .tree td {
   padding: .5em .7em;
   color: #484848;

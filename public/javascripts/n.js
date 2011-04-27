@@ -2,7 +2,7 @@
 	$(document).ready(function() {
 	  var $loader = $("#loader"),
 	      $tree = $(".tree");
-	  $loader.fadeOut('fast');
+	  // default load
 		$("a[rel='ajax']").click(function(e) {
 			e.preventDefault(); // prevent defailt
 			var $this = $(this),
@@ -35,7 +35,9 @@
 				}
 			});
 		});
-	});
+		$("#my_apps").trigger("click");
+		
+	}); // end doc ready
 	
 	// get keys of object
 	function getKeys(obj) {
