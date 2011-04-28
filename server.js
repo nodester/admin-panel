@@ -10,7 +10,7 @@ var app = module.exports = express.createServer();
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-	app.use(express.static(__dirname + '/public'));
+	//app.use(express.static(__dirname + '/public'));
 	app.use(cauth(auth.auth())); // connect-auth with my custom auth
 	app.use(express.logger()); // enable logger
   app.use(express.bodyParser()); // parse body
@@ -28,6 +28,8 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
+var static_routing = express.static(__dirname + '/public',{ maxAge: "6000000" });
+
 // Checks whether user has logged in
 // No data store used, just plain cookie based auth
 function checkAuth(req,res,next) {
@@ -36,7 +38,7 @@ function checkAuth(req,res,next) {
 	// then user is logged in
 	// --- Need to write logged in session 
 	// after verification frm nodester
-	if(req.session.cred) {
+	if(req.session && req.session.cred) {
 		// get from session
 		console.log('logged in');
 		req.user = req.session.cred;
@@ -46,6 +48,11 @@ function checkAuth(req,res,next) {
 	}
 	next();
 }
+
+app.get("/static/*", function (req, res, next) { 
+  req.url = req.params[0]; 
+  static_routing(req, res, next); 
+});
 
 // Logout
 app.get('/logout',checkAuth, function(req,res) {
@@ -108,38 +115,42 @@ app.post('/login',checkAuth, function(req,res, next) {
 	}
 });
 
-
-// Routes
-app.get('/', checkAuth, function(req, res){
-	// give auth name
-	if(req.is_logged == false)
-		res.redirect("/login");
-	else
-		res.render('index', {
-    	title: 'Home | Nodester Admin Panel',
-    	is_logged: req.is_logged,
-    	user: req.user.user
-  	});
-});
-
 // Need to write paths to all ndoester APIs
 // including GET and POST - done
 // Need to figure out REGEX - done
 app.all("/api/*", checkAuth, function(req, res, next){
 	var params = "";
 	// based on verb, get params
-	if(req.method == "GET") {
-		params = req.query;
-	} else {
-		params = req.body;
-	}
-
-	// method, api path, data, credentials, callback
-	nodester.request("GET", req.params[0], params, req.user.creds,function(response) {
-		res.header('Content-Type', 'application/json');
-		res.end(response);
-	});
+	if(req.is_logged === true) {
+  	if(req.method == "GET") {
+  		params = req.query;
+  	} else {
+  		params = req.body;
+  	}
+  	// method, api path, data, credentials, callback
+  	nodester.request(req.method, req.params[0], params, req.user.creds,function(response) {
+  		res.header('Content-Type', 'application/json');
+  		res.end(response);
+  	});
+  } else {
+    res.send('Please Login', { 'Content-Type': 'text/plain' }, 401);
+  }
 	
+});
+
+// Routes
+// All routes
+app.get("*", checkAuth, function(req, res){
+	// give auth name
+	if(req.is_logged == false)
+		res.redirect("/login");
+	else {
+		res.render('index', {
+    	title: "Nodester Admin Panel",
+    	is_logged: req.is_logged,
+    	user: req.user.user
+  	});
+	}
 });
 
 // Only listen on $ node app.js

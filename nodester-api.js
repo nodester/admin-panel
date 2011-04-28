@@ -1,12 +1,7 @@
 var http = require('http'),
-		encode = require("./encoding");
-
-// default functions
-var options = {
-  host: 'api.nodester.com',
-  port: 80
-};
-
+		encode = require("./encoding"),
+		HOST = "api.nodester.com",
+		PORT = 80;
 // Generate Query parameters from params(json)
 function generateQueryParams(params) {
 	console.log('generating params');
@@ -17,7 +12,7 @@ function generateQueryParams(params) {
     }
   }
 	if(tail.length > 0)
-  	return "?" + tail.join("&");
+  	return tail.join("&");
 	else
 		return "";
 }
@@ -25,6 +20,10 @@ function generateQueryParams(params) {
 // authorize user
 function authorize(credentials, callback) {
 	// options for credential checkin
+	var options = {
+    host: HOST,
+    port: PORT
+  };
 	options.path = "/apps";
   options.headers = {"Authorization" : "Basic " + credentials};
 	
@@ -37,14 +36,34 @@ function authorize(credentials, callback) {
 
 // interface to nodester api
 function request(method, path, data, credentials, callback) {
-	var formatted_path =  "/" + path + generateQueryParams(data);
+  var queryString = generateQueryParams(data);
+  console.log("query string ====>>> ", queryString);
+	var formatted_path =  "/" + path + ((method == "GET" && queryString.length > 0) ? "?" + queryString : "");
 	console.log("formatted path ===> ", formatted_path);
+	console.log("method ===> " ,method);
+	console.log("params ===> " ,data);
 	
-	options.path = formatted_path;
-  options.headers = {"Authorization" : "Basic " + credentials};
-	options.method = method;
+	var options = {
+    host: HOST,
+    port: PORT,
+    path: formatted_path,
+    method : method,
+    headers: {"Authorization": "Basic " + credentials}
+  };
+  
+  // headers
+  if(method != "GET") {
+    options.headers["Content-Length"] = queryString.length.toString();
+    options.headers["Content-Type"] = "application/x-www-form-urlencoded";
+  }
+  
+	// request object
+	var req = http.request(options);
+	// write post body data
+	if(method != "GET")
+	  req.write(queryString);
 	
-	var req = http.request(options, function(res) {
+	req.on("response", function(res) {
 	  console.log('STATUS: ' + res.statusCode);
 	  console.log('HEADERS: ' + JSON.stringify(res.headers));
 	  res.setEncoding('utf8');
@@ -54,6 +73,11 @@ function request(method, path, data, credentials, callback) {
 			}
 	  });
 	});
+	
+	req.on("error", function(err) {
+	  console.log('ERROR: ', err);
+	});
+	
 	req.end();
 }
 

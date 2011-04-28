@@ -172,10 +172,6 @@ p#incomplete {
   -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
 }
 
-.c {
-  max-width:650px;
-}
-
 .tree {
   border-top: 1px solid #D8D8D8;
   border-left: 1px solid #D8D8D8;
