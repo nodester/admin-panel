@@ -35,6 +35,9 @@ Array.prototype.clean = function(deleteValue) {
 			    
 			//remove active class
 			$(".lnav .active").removeClass("active"); 
+			// push state of page
+			history.pushState(curr_page, null, curr_page.uri);
+			
 			// add active class
 			$this.addClass("active"); 
 			// fadeout tree
@@ -42,8 +45,6 @@ Array.prototype.clean = function(deleteValue) {
 			  // show loader
 			  $loader.fadeIn('fast');
 			});
-			// push state of page
-			history.pushState(curr_page, null, curr_page.uri);
 			// ajax
 			$.ajax({			  
 				url:"/api" + href,
@@ -95,6 +96,11 @@ Array.prototype.clean = function(deleteValue) {
 				      break;
 				      // Actions for app domains
 				      case "appdomains":
+				      var domain = JSON.stringify({
+				        appname : "{{appname}}",
+				        domain: "{{domain}}"
+				      });
+				      template = template.replace("--actions--","<a href='/appdomains' data-params='" + domain + "' rel='delete'>delete</a>");
 				      break;
 				    }
 				  }
@@ -127,6 +133,23 @@ Array.prototype.clean = function(deleteValue) {
 	  $.ajax({
 	    url:"/api" + href,
 	    type:"PUT",
+	    data:data,
+	    success:function(r) {
+	      
+	    }
+	  })
+	  return false;
+	});
+	
+	$("a[rel='delete']").live("click", function(e) {
+	  e.preventDefault();
+	  var $this = $(this),
+	      href = $(this).attr("href"),
+	      data = JSON.parse($(this).attr("data-params"));
+	      
+	  $.ajax({
+	    url:"/api" + href,
+	    type:"DELETE",
 	    data:data,
 	    success:function(r) {
 	      
