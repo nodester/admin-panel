@@ -208,3 +208,41 @@ footer p {
   padding:0;
   line-height:1.4em;
 }
+
+/**** MODAL ****/
+.modal {
+  visibility: hidden;
+  top: 100px!important;
+  left: 50%;
+  margin-left:-260px;
+  position: fixed;
+  z-index: 1002;
+  width: 520px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+  -box-shadow: 0 0 10px rgba(0, 0, 0, .4);
+  background:#fff;
+  min-height:200px;
+}
+
+.modal .close {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  cursor: pointer;
+  z-index: 1003;
+  display: inline-block;
+}
+
+.modal-bg {
+  background: rgba(0,0,0,0.5);
+  width:100%;
+  height:100%;
+  position:absolute;
+  z-index:1001;
+  top:0;
+  left:0;
+}

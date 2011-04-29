@@ -25,19 +25,20 @@ Array.prototype.clean = function(deleteValue) {
 	  var $loader = $("#loader"),
 	      $tree = $(".tree");
         
-	  // default load
+	  // Click event for main links
+	  // Apps List
+	  // AppDomain List
 		$("a[rel='ajax']").click(function(e) {
 			e.preventDefault(); // prevent defailt
-			// cache some more
+			// init vars
 			var $this = $(this),
-			    href = $this.attr("href"),
-			    curr_page = {uri: href, path: Helper.getPath(href)};
+			    href = $this.attr("href"), // get href from a
+			    curr_page = {uri: href, path: Helper.getPath(href)}; // info about clicked page
 			    
 			//remove active class
 			$(".lnav .active").removeClass("active"); 
 			// push state of page
 			history.pushState(curr_page, null, curr_page.uri);
-			
 			// add active class
 			$this.addClass("active"); 
 			// fadeout tree
@@ -45,12 +46,16 @@ Array.prototype.clean = function(deleteValue) {
 			  // show loader
 			  $loader.fadeIn('fast');
 			});
-			// ajax
+			
+			// to get the apps|domains list pages
 			$.ajax({			  
 				url:"/api" + href,
 				success:function(r) {
+				  // if r.status (for errors)
+				  // if r.length (if not array or == 0)
 				  if(r.status || r.length == 0)
-				    return;
+				    return;  // get out
+				    
 				  // init vars
 					var keys = Helper.getKeys(r[0]),
 					    len = keys.length,
@@ -59,13 +64,13 @@ Array.prototype.clean = function(deleteValue) {
 					    apps_template = "{{#items}}<tr>--sub--</tr>{{/items}}", //template for apps
 					    header_template = ""; // template for table header
 					    
-					// run across keys from api
+					// run across property keys from result
 					for(var i=0;i<len;i++) {
 					  // exclude a few keys
 					  if(exclude_keys.indexOf(keys[i]) != -1)
 					    continue;
 					  // create table rows
-					  template += ["<td>{{",keys[i],"}}</td>"].join("");
+					  template += ["<td class='", keys[i] ,"'>{{", keys[i] ,"}}</td>"].join("");
 					  // create table header row
 					  header_template += ["<th>",keys[i],"</th>"].join("");
 				  }
@@ -74,7 +79,6 @@ Array.prototype.clean = function(deleteValue) {
 				  template += "<td>--actions--</td>";
 				  // decide what are the actions
 				  // based on type
-				  
 				  if(curr_page) {
 				    switch(curr_page.path) {
 				      case "apps":
@@ -92,7 +96,6 @@ Array.prototype.clean = function(deleteValue) {
   				      "<a href='/app/{{name}}' rel='modal'>info</a>"
 				      ].join(" ");
 				      template = template.replace("--actions--",actions);
-				      
 				      break;
 				      // Actions for app domains
 				      case "appdomains":
@@ -123,30 +126,70 @@ Array.prototype.clean = function(deleteValue) {
 		  
 	}); // end doc ready
 	
-	
+	// Click event for links with method=PUT
+	// Methods
+	// Update User
+	// curl -X PUT -u "testuser:123" -d "password=test" http://api.nodester.com/user
+  // curl -X PUT -u "testuser:123" -d "rsakey=1234567" http://api.nodester.com/user	
+  // Change application details (start|stop|restart) and app_details
+  // curl -X PUT -u "testuser:123" -d "appname=a&running=true" http://api.nodester.com/app
+  // curl -X PUT -u "testuser:123" -d "appname=a&start=hello1.js" http://api.nodester.com/app
 	$("a[rel='put']").live("click", function(e) {
 	  e.preventDefault();
 	  var $this = $(this),
-	      href = $(this).attr("href"),
-	      data = JSON.parse($(this).attr("data-params"));
-	      
+	      href = $this.attr("href"),
+	      thisHtml = $this.html(),
+	      $allRels = $("a[rel='put']"),
+	      data = JSON.parse($this.attr("data-params"));
+	  // remove put from rel --- temporary
+	  $allRels.attr("rel", "");
+	  $this.html(Helper.inlineLoader($this));
+	  // send ajax request
 	  $.ajax({
 	    url:"/api" + href,
 	    type:"PUT",
 	    data:data,
 	    success:function(r) {
-	      
+	      console.log(r);
+	      if(r.status == "success") {
+  	      // since href can be /apps or /appdomains
+  	      switch(href.split("/")[1]) {
+  	        case 'app':
+  	          var $tRow = $this.parent().parent();
+  	          $tRow.find(".pid").text(r.pid); // change pid
+  	          $tRow.find(".running").text(r.running); // change running
+  	        break;
+  	        case 'appdomains':
+	        
+  	        break;
+  	      }
+        } else {
+          // error
+        }
+	    },
+	    // on ajax complete, instill put agin
+	    complete:function() {
+	      $allRels.attr("rel", "put");
+	      $this.html(thisHtml);
 	    }
 	  })
 	  return false;
 	});
 	
+	
+	// Click event for links with method=DELETE
+	// Methods
+	// Delete App
+	// curl -X DELETE -u "testuser:123" -d "appname=test" http://api.nodester.com/app
+	// Delete AppDomain
+	// curl -X DELETE -u "testuser:123" -d "appname=test&domain=example.com" http://api.nodester.com/appdomains
 	$("a[rel='delete']").live("click", function(e) {
 	  e.preventDefault();
 	  var $this = $(this),
 	      href = $(this).attr("href"),
 	      data = JSON.parse($(this).attr("data-params"));
-	      
+	      // remove put from rel --- temporary
+    $this.attr("rel", "");    
 	  $.ajax({
 	    url:"/api" + href,
 	    type:"DELETE",
@@ -158,6 +201,37 @@ Array.prototype.clean = function(deleteValue) {
 	  return false;
 	});
 	
+	// Click Event to display Modal Box
+	// Methods
+	// SHow Information about APP
+	$("a[rel='modal']").live("click", function(e) {
+	  e.preventDefault();
+	  var $this = $(this),
+	      thisHtml = $this.html(),
+	      href = $(this).attr("href");
+    // remove put from rel --- temporary
+	  $this.attr("rel", "");
+	  // show Loader on the spot
+	  $this.html(Helper.inlineLoader($this));
+	  $.ajax({
+	    url:"/api" + href,
+	    success:function(r) {
+	      if(r.status == "success") {
+	        $("#modal").modal({contnet:r});
+	      } else {
+	        // error
+	      }
+	    },
+	    // on ajax complete, instill put agin
+	    complete:function() {
+	      $this.attr("rel", "modal");
+	      $this.html(thisHtml);
+	    }
+	  })
+	  return false;
+	});
+	
+	// Helper Methods
 	var Helper = {
     // Gets URI Path
     getPath: function(uri) {
@@ -171,6 +245,10 @@ Array.prototype.clean = function(deleteValue) {
         keys.push(key);
       }
       return keys;      
+    },
+    // return inline loader
+    inlineLoader: function($tag) {
+      return "<span style='width:" + $tag.width()+ "px; display:inline-block'><img src='/static/i/loader-small.gif' /></span>"
     }
   }
 })(jQuery);
