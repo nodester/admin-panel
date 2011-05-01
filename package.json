@@ -13,7 +13,10 @@
   "engines": {
     "node": "0.4.7"
   },
-  "dependencies": {},
+  "dependencies": {
+    "express":">=v2.3.2",
+    "connect-auth":">=0.2.2"
+  },
   "devDependencies": {},
   "scripts": {
     "start": "node server.js"
