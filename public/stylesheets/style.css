@@ -75,15 +75,23 @@ ul.lnav {
   font-size:12px;
 }
 
-ul.lnav li.first {
+ul.snav {
+  display:none;
+}
+
+ul.snav > li {
+  padding:5px 0;
+}
+
+ul.lnav > li.first {
   margin:0;
 }
 
-ul.lnav li {
+ul.lnav > li {
   margin-top:2px;
 }
 
-ul.lnav li a {
+ul.lnav > li > a {
   display:block;
   background:#ddd;
   padding:0.5em 1em;
@@ -91,10 +99,16 @@ ul.lnav li a {
   text-decoration:none;
 }
 
-ul.lnav li a:hover,
-ul.lnav li a.active {
+ul.lnav > li > a:hover,
+ul.lnav > li.active > a {
   background:#bbb;
 }
+
+ul.lnav > li.active ul.snav {
+  display:block;
+}
+
+
 
 .login_wrap {
   width:420px;
@@ -145,6 +159,10 @@ input.error {
   background-image: -webkit-linear-gradient(top, #3289d3, #1a6db4); /* Chrome 10+, Saf5.1+ */
   background-image: linear-gradient(top, #3289d3, #1a6db4);
             filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#3289d3', EndColorStr='#1a6db4'); /* IE6–IE9 */
+}
+
+.redgrad {
+  background:firebrick;
 }
 
 p.log_info {
@@ -269,6 +287,15 @@ footer p {
 .table td.label {
   width:100px;
 }
+
+.table td.form_label {
+  width:150px;
+}
+
 .table td {
   text-align:left;
+}
+
+.no_u {
+  text-decoration:none;
 }

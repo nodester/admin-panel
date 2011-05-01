@@ -60,7 +60,7 @@ Array.prototype.clean = function(deleteValue) {
 			// push state of page
 			history.pushState(curr_page, null, curr_page.uri);
 			// add active class
-			$this.addClass("active"); 
+			$this.parent().addClass("active"); 
 			// fadeout tree
 			$tree.fadeOut('fast', function() {
 			  // show loader
@@ -143,13 +143,50 @@ Array.prototype.clean = function(deleteValue) {
 	$("a[rel='delete']").live("click", function(e) {
 	  e.preventDefault();
 	  var $this = $(this),
-	      href = $(this).attr("href"),
-	      data = JSON.parse($(this).attr("data-params"));
-	      // remove put from rel --- temporary
-    $this.attr("rel", "");    
+	      href = $this.attr("href"),
+	      thisHtml = $this.html(),
+	      thisCss = $this.attr("class"),
+	      data = JSON.parse($this.attr("data-params"));
+	  // remove put from rel --- temporary
+    $this.removeAttr("rel").removeAttr("class");
+    $this.html(Helper.inlineLoader($this)); //loader 
 	  $.ajax({
 	    url:"/api" + href,
 	    type:"DELETE",
+	    data:data,
+	    success:function(r) {
+	      if(r.status && r.status == "success") {
+	        window.location = "/apps";
+	      } else {
+	        // error
+	      }
+	    },
+      complete:function() {
+	      $this.attr("rel", "put").attr("class",thisCss);
+	      $this.html(thisHtml);
+	    }
+	  })
+	  return false;
+	});
+	
+	
+	// Click event for links with method=POST
+	// Methods
+	// CREATE App
+	// curl -X POST -u "testuser:123" -d "appname=a&start=hello.js" http://api.nodester.com/app
+	// Delete AppDomain
+	// curl -X DELETE -u "testuser:123" -d "appname=test&domain=example.com" http://api.nodester.com/appdomains
+	$("a[rel='post']").live("click", function(e) {
+	  e.preventDefault();
+	  var $this = $(this),
+	      thisHtml = $this.html(),
+	      href = $(this).attr("href"),
+	      data = JSON.parse($(this).attr("data-params"));
+	      // remove put from rel --- temporary
+    $this.attr("rel", "");
+	  $.ajax({
+	    url:"/api" + href,
+	    type:"POST",
 	    data:data,
 	    success:function(r) {
 	      
@@ -166,15 +203,63 @@ Array.prototype.clean = function(deleteValue) {
 	  var $this = $(this),
 	      thisHtml = $this.html(),
 	      href = $this.attr("href"),
+	      $modal = $("#modal"),
 	      appname = $this.attr("data-params"),
-	      template = ["<h2>About <strong>" + appname + "</strong></h2>",
-	                  "<table cellpadding=0 cellspacing=0 class='table'>",
-	                  "<tr><td class='label'>port</td><td>{{port}}</td></tr>",
-	                  "<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>",
-	                  "<tr><td class='label'>start file</td><td>{{start}}</td></tr>",
-	                  "<tr><td class='label'>app status</td><td>{{running}}</td></tr>",
-	                  "<tr><td class='label'>process id</td><td>{{pid}}</td></tr>",
-	                  "</table>"].join("");
+	      modal_template = {
+	        app_info : ["<h2>About <strong>" + appname + "</strong></h2>",
+  	                  "<table cellpadding=0 cellspacing=0 class='table'>",
+  	                  "<tr><td class='label'>port</td><td>{{port}}</td></tr>",
+  	                  "<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>",
+  	                  "<tr><td class='label'>start file</td><td>{{start}}</td></tr>",
+  	                  "<tr><td class='label'>app status</td><td>{{running}}</td></tr>",
+  	                  "<tr><td class='label'>process id</td><td>{{pid}}</td></tr>",
+  	                  "</table>",
+  	                  "<p><a href='/app' data-params='" + JSON.stringify({appname: appname}) + "' class='submit r5 redgrad no_u' rel='delete'>Destroy</a></p>"].join(""),
+  	      app_create : ["<h2>Create new app</h2>",
+  	                    "<form method='post' action='/app' class='form'>",
+                	      "<table cellpadding=0 cellspacing=0 class='table'>",
+                        "<tr><td class='form_label'>app name</td>",
+                        "<td><input class='input r5' name='params_appname' id='params_appname' /></td></tr>",
+                        "<tr><td class='form_label'>start file<br /></td>",
+                        "<td><input class='input r5' name='params_start' id='params_start' /></td></tr>",
+  	                    "</table>",
+  	                    "<input type='submit' class='submit r5 bluegrad' value='Create' />",
+  	                    '<p id="failed" class="msg r5" style="display:none; margin-top:10px" ></p>',  	                    
+  	                    "</form>"].join("")
+	      },
+	      modal_type = $this.attr("class");
+	      
+	  // to render forms    
+	  if(modal_type == "app_create") {
+	    $modal.modal({content: modal_template.app_create, onOpen: function() {
+	      // bind the create app form
+	      $modal.find(".form").submit(function(e) {
+	        var $this = $(this),// form obj
+	            href = $this.attr("action"),
+	            $err = $this.find("#failed"); 
+	        // hide error box
+	        $err.hide();
+	        $.ajax({
+	          url: "/api" + href,
+	          type:"post",
+	          data: {appname:$("#params_appname").val(), start:$("#params_start").val()},
+	          success: function(r) {
+	            if(r.status && r.status == "success") {
+	              $("a[href='/apps']").trigger("click"); // refresh app list
+	              $modal.find(".close").trigger("click"); // close modal box
+              } else {
+                $this.find(".input").addClass("error"); // add error class to text
+                $err.html(r.message).show(); // show error
+              }
+	          }          
+	        })
+	        e.preventDefault;
+	        return false;
+	      });
+      }
+	    }); 
+	    return;
+	  }
     // remove put from rel --- temporary
 	  $this.attr("rel", "");
 	  // show Loader on the spot
@@ -183,7 +268,7 @@ Array.prototype.clean = function(deleteValue) {
 	    url:"/api" + href,
 	    success:function(r) {
 	      if(r.status == "success") {
-	        $("#modal").modal({content: Mustache.to_html(template,r)});
+	        $modal.modal({content: Mustache.to_html(modal_template[modal_type],r)}); 
 	      } else {
 	        // error
 	      }
@@ -241,7 +326,7 @@ Array.prototype.clean = function(deleteValue) {
 				      var actions_template = [
   				      "<a href='/app' data-params='" + start_action + "' rel='put'>start</a>",
   				      "<a href='/app' data-params='" + stop_action + "' rel='put'>stop</a>",
-  				      "<a href='/app/{{name}}' data-params='{{name}}' rel='modal'>info</a>"
+  				      "<a href='/app/{{name}}' data-params='{{name}}' class='app_info' rel='modal'>info</a>"
 				      ].join(" ");
 				      req_vars.template.body = req_vars.template.body.replace("{{actions}}",actions_template);
 				      break;
@@ -286,8 +371,8 @@ Array.prototype.clean = function(deleteValue) {
       return keys;      
     },
     // return inline loader
-    inlineLoader: function($tag) {
-      return "<span style='width:" + $tag.width()+ "px; display:inline-block'><img src='/static/i/loader-small.gif' /></span>"
+    inlineLoader: function($dom) {
+      return "<span style='width:" + $dom.width()+ "px; display:inline-block'><img src='/static/i/loader-small.gif' /></span>"
     }
   }
 })(jQuery);
