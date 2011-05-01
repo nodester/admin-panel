@@ -172,7 +172,8 @@ p#incomplete {
   -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
 }
 
-.tree {
+.tree,
+.table {
   border-top: 1px solid #D8D8D8;
   border-left: 1px solid #D8D8D8;
   border-right: 1px solid #D8D8D8;
@@ -183,7 +184,8 @@ p#incomplete {
   width:100%;
 }
 
-.tree th {
+.tree th,
+.table th {
   font-weight: normal;
   background-color: #EAEAEA;
   color: #999;
@@ -191,7 +193,8 @@ p#incomplete {
   border-bottom: 1px solid #D8D8D8;
 }
 
-.tree td {
+.tree td,
+.table td {
   padding: .5em .7em;
   color: #484848;
   border-bottom: 1px solid #E1E1E1;
@@ -249,4 +252,23 @@ footer p {
 
 #modal_content {
   padding:20px;
+}
+
+#modal_content h2 {
+  font-weight:200;
+}
+
+#modal_content h2 strong {
+  font-weight:700;
+}
+
+.table {
+  margin-top:10px;
+}
+
+.table td.label {
+  width:100px;
+}
+.table td {
+  text-align:left;
 }

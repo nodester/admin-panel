@@ -28,7 +28,8 @@ Array.prototype.clean = function(deleteValue) {
 	        apps: {
 			      body:["<td class='name'>{{name}}</td>",
                   "<td class='port'>{{port}}</td>",
-  		            "<td class='status'>{{running}}</td>"].join(""),
+  		            "<td class='status'>{{running}}</td>",
+  		            "<td class='actions'>{{actions}}</td>"].join(""),
   		      header: ["<th>name</th>",
   		               "<th>port</th>",
   		               "<th>app-status</th>",
@@ -36,7 +37,8 @@ Array.prototype.clean = function(deleteValue) {
 			    },
 			    appdomains: {
 			      body:["<td class='domain'>{{domain}}</td>",
-                  "<td class='appname'>{{appname}}</td>"].join(""),
+                  "<td class='appname'>{{appname}}</td>",
+                  "<td class='actions'>{{actions}}</td>"].join(""),
   		      header: ["<th>domain</th>",
   		               "<th>appname</th>",
   		               "<th>action</th>"].join("")
@@ -163,13 +165,16 @@ Array.prototype.clean = function(deleteValue) {
 	  e.preventDefault();
 	  var $this = $(this),
 	      thisHtml = $this.html(),
-	      href = $(this).attr("href"),
-	      template = ["<h3>appname</h3>",
-	                  "<p>port - {{port}}</p>",
-	                  "<p>gitrepo - {{gitrepo}}</p>",
-	                  "<p>start file - {{start}}</p>",
-	                  "<p>app status - {{running}}</p>",
-	                  "<p>process id - {{pid}}</p>"].join("");
+	      href = $this.attr("href"),
+	      appname = $this.attr("data-params"),
+	      template = ["<h2>About <strong>" + appname + "</strong></h2>",
+	                  "<table cellpadding=0 cellspacing=0 class='table'>",
+	                  "<tr><td class='label'>port</td><td>{{port}}</td></tr>",
+	                  "<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>",
+	                  "<tr><td class='label'>start file</td><td>{{start}}</td></tr>",
+	                  "<tr><td class='label'>app status</td><td>{{running}}</td></tr>",
+	                  "<tr><td class='label'>process id</td><td>{{pid}}</td></tr>",
+	                  "</table>"].join("");
     // remove put from rel --- temporary
 	  $this.attr("rel", "");
 	  // show Loader on the spot
@@ -218,8 +223,6 @@ Array.prototype.clean = function(deleteValue) {
 				  // init vars
 					var keys = Helper.getKeys(r[0]),
 					    len = keys.length;
-				  // *add actions key to header
-				  req_vars.template.body += "<td>--actions--</td>";
 				  // check curr_page
 				  if(req_vars.curr_page) {
 				    switch(req_vars.curr_page.path) {
@@ -238,9 +241,9 @@ Array.prototype.clean = function(deleteValue) {
 				      var actions_template = [
   				      "<a href='/app' data-params='" + start_action + "' rel='put'>start</a>",
   				      "<a href='/app' data-params='" + stop_action + "' rel='put'>stop</a>",
-  				      "<a href='/app/{{name}}' rel='modal'>info</a>"
+  				      "<a href='/app/{{name}}' data-params='{{name}}' rel='modal'>info</a>"
 				      ].join(" ");
-				      req_vars.template.body = req_vars.template.body.replace("--actions--",actions_template);
+				      req_vars.template.body = req_vars.template.body.replace("{{actions}}",actions_template);
 				      break;
 				      // Actions for app domains
 				      case "appdomains":
@@ -250,7 +253,7 @@ Array.prototype.clean = function(deleteValue) {
 				        appname : "{{appname}}",
 				        domain: "{{domain}}"
 				      });
-				      req_vars.template.body = req_vars.template.body.replace("--actions--","<a href='/appdomains' data-params='" + domain + "' rel='delete'>delete</a>");
+				      req_vars.template.body = req_vars.template.body.replace("{{actions}}","<a href='/appdomains' data-params='" + domain + "' rel='delete'>delete</a>");
 				      break;
 				    }
 				  }
