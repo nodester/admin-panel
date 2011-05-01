@@ -23,7 +23,7 @@
           topOffset = modal.height() + topMeasure,
           locked = false,
           modalBG = $('.modal-bg'),
-          modalContent = $("#fabModalContent");
+          modalContent = $("#modal_content");
 
           // Create Modal BG
           if(modalBG.length == 0) {

@@ -23,17 +23,35 @@ Array.prototype.clean = function(deleteValue) {
 	$(document).ready(function() {
 	  // cache some doms
 	  var $loader = $("#loader"),
-	      $tree = $(".tree");
+	      $tree = $(".tree"),
+	      template = {
+	        apps: {
+			      body:["<td>{{name}}</td>",
+                  "<td>{{port}}</td>",
+  		            "<td>{{running}}</td>"].join(""),
+  		      header: ["<th>name</th>",
+  		               "<th>port</th>",
+  		               "<th>app-status</th>",
+  		               "<th>action</th>"].join("")
+			    },
+			    appdomains: {
+			      body:["<td>{{domain}}</td>",
+                  "<td>{{appname}}</td>"].join(""),
+  		      header: ["<th>domain</th>",
+  		               "<th>appname</th>",
+  		               "<th>action</th>"].join("")
+			    }
+	      };
         
-	  // Click event for main links
+	  // Main Links
 	  // Apps List
 	  // AppDomain List
-		$("a[rel='ajax']").click(function(e) {
+		$("a[rel='main']").click(function(e) {
 			e.preventDefault(); // prevent defailt
 			// init vars
 			var $this = $(this),
 			    href = $this.attr("href"), // get href from a
-			    curr_page = {uri: href, path: Helper.getPath(href)}; // info about clicked page
+			    curr_page = {uri: href, path: Helper.getPath(href)};
 			    
 			//remove active class
 			$(".lnav .active").removeClass("active"); 
@@ -47,74 +65,13 @@ Array.prototype.clean = function(deleteValue) {
 			  $loader.fadeIn('fast');
 			});
 			
-			// to get the apps|domains list pages
-			$.ajax({			  
-				url:"/api" + href,
-				success:function(r) {
-				  // if r.status (for errors)
-				  // if r.length (if not array or == 0)
-				  if(r.status || r.length == 0)
-				    return;  // get out
-				    
-				  // init vars
-					var keys = Helper.getKeys(r[0]),
-					    len = keys.length,
-					    template = "",
-					    view = {items:r},
-					    apps_template = "{{#items}}<tr>--sub--</tr>{{/items}}", //template for apps
-					    header_template = ""; // template for table header
-					    
-					// run across property keys from result
-					for(var i=0;i<len;i++) {
-					  // exclude a few keys
-					  if(exclude_keys.indexOf(keys[i]) != -1)
-					    continue;
-					  // create table rows
-					  template += ["<td class='", keys[i] ,"'>{{", keys[i] ,"}}</td>"].join("");
-					  // create table header row
-					  header_template += ["<th>",keys[i],"</th>"].join("");
-				  }
-				  // add actions key to header
-				  header_template += "<th>actions</th>";
-				  template += "<td>--actions--</td>";
-				  // decide what are the actions
-				  // based on type
-				  if(curr_page) {
-				    switch(curr_page.path) {
-				      case "apps":
-				      var start_action = JSON.stringify({
-				        appname: "{{name}}",
-				        running: true
-				      }),
-				      stop_action = JSON.stringify({
-				        appname: "{{name}}",
-				        running: false
-				      });
-				      var actions = [
-  				      "<a href='/app' data-params='" + start_action + "' rel='put'>start</a>",
-  				      "<a href='/app' data-params='" + stop_action + "' rel='put'>stop</a>",
-  				      "<a href='/app/{{name}}' rel='modal'>info</a>"
-				      ].join(" ");
-				      template = template.replace("--actions--",actions);
-				      break;
-				      // Actions for app domains
-				      case "appdomains":
-				      var domain = JSON.stringify({
-				        appname : "{{appname}}",
-				        domain: "{{domain}}"
-				      });
-				      template = template.replace("--actions--","<a href='/appdomains' data-params='" + domain + "' rel='delete'>delete</a>");
-				      break;
-				    }
-				  }
-					// replace sub with new  
-					apps_template = apps_template.replace(/--sub--/i, template);
-					// hide loader, but show table
-					$loader.fadeOut('fast', function() {
-					  $tree.html(["<thead><tr>",header_template,"</tr></thead>","<tbody>", Mustache.to_html(apps_template, view),"</tbody>"].join("")).fadeIn("fast");
-					}); // hide loader
-				} // end success of ajax
-			}); // end ajax
+			ajaxHelpers.main({curr_page:curr_page,template:template[curr_page.path]}, function(template) {
+  			// hide loader, but show table
+  			$loader.fadeOut('fast', function() {
+  			  $tree.html(template).fadeIn("fast");
+  			}); // hide loader
+			});
+			
 			return false;
 		}); // end onclick
 		
@@ -208,7 +165,13 @@ Array.prototype.clean = function(deleteValue) {
 	  e.preventDefault();
 	  var $this = $(this),
 	      thisHtml = $this.html(),
-	      href = $(this).attr("href");
+	      href = $(this).attr("href"),
+	      template = ["<h3>appname</h3>",
+	                  "<p>port - {{port}}</p>",
+	                  "<p>gitrepo - {{gitrepo}}</p>",
+	                  "<p>start file - {{start}}</p>",
+	                  "<p>app status - {{status}}</p>",
+	                  "<p>process id - {{pid}}</p>"].join("");
     // remove put from rel --- temporary
 	  $this.attr("rel", "");
 	  // show Loader on the spot
@@ -217,7 +180,7 @@ Array.prototype.clean = function(deleteValue) {
 	    url:"/api" + href,
 	    success:function(r) {
 	      if(r.status == "success") {
-	        $("#modal").modal({contnet:r});
+	        $("#modal").modal({content: Mustache.to_html(template,r)});
 	      } else {
 	        // error
 	      }
@@ -230,6 +193,81 @@ Array.prototype.clean = function(deleteValue) {
 	  })
 	  return false;
 	});
+	
+	
+	var ajaxHelpers = {
+	  /**
+	   * Ajax helpers for main
+	   * <b>Expects</b>
+	   * * curr_page (String) - {uri:"",path:""}
+	   * * props (Array) - props for particular api end point
+	   * <b>Returns<?b>
+	   * callback (template)
+	   *
+	  **/
+	  main: function(params,callback) {
+	    var req_vars = params;
+	    // to get the apps|domains list pages
+			$.ajax({
+				url:"/api" + req_vars.curr_page.uri,
+				success:function(r) {
+				  // if r.status (for errors)
+				  // if r.length (if not array or == 0)
+				  if(r.status || r.length == 0) {
+				    callback("err");
+				    return;  // get out
+			    }
+				  // init vars
+					var keys = Helper.getKeys(r[0]),
+					    len = keys.length;
+				  // *add actions key to header
+				  req_vars.template.body += "<td>--actions--</td>";
+				  // check curr_page
+				  if(req_vars.curr_page) {
+				    switch(req_vars.curr_page.path) {
+				      case "apps":
+				      // define params to be sent in the request
+				      // append the params in the data-params
+				      var start_action = JSON.stringify({
+				        appname: "{{name}}",
+				        running: true
+				      }),
+				      stop_action = JSON.stringify({
+				        appname: "{{name}}",
+				        running: false
+				      });
+				      // actions template
+				      var actions_template = [
+  				      "<a href='/app' data-params='" + start_action + "' rel='put'>start</a>",
+  				      "<a href='/app' data-params='" + stop_action + "' rel='put'>stop</a>",
+  				      "<a href='/app/{{name}}' rel='modal'>info</a>"
+				      ].join(" ");
+				      req_vars.template.body = req_vars.template.body.replace("--actions--",actions_template);
+				      break;
+				      // Actions for app domains
+				      case "appdomains":
+				      // define params to be sent in the request
+				      // append the params in the data-params
+				      var domain = JSON.stringify({
+				        appname : "{{appname}}",
+				        domain: "{{domain}}"
+				      });
+				      req_vars.template.body = req_vars.template.body.replace("--actions--","<a href='/appdomains' data-params='" + domain + "' rel='delete'>delete</a>");
+				      break;
+				    }
+				  }
+				  // callback with the template
+				  callback(["<thead><tr>",
+				          req_vars.template.header,
+				          "</tr></thead>",
+				          "<tbody>", 
+				          Mustache.to_html("{{#items}}<tr>" + req_vars.template.body + "</tr>{{/items}}", {items:r}),
+				          "</tbody>"].join(""));
+				              
+				} // end success of ajax
+			}); // end ajax
+	  }
+	}
 	
 	// Helper Methods
 	var Helper = {

@@ -230,8 +230,8 @@ footer p {
 
 .modal .close {
   position: absolute;
-  top: 15px;
-  left: 20px;
+  top: 10px;
+  right: 10px;
   cursor: pointer;
   z-index: 1003;
   display: inline-block;
@@ -245,4 +245,8 @@ footer p {
   z-index:1001;
   top:0;
   left:0;
+}
+
+#modal_content {
+  padding:20px;
 }
