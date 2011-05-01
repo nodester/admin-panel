@@ -26,17 +26,17 @@ Array.prototype.clean = function(deleteValue) {
 	      $tree = $(".tree"),
 	      template = {
 	        apps: {
-			      body:["<td>{{name}}</td>",
-                  "<td>{{port}}</td>",
-  		            "<td>{{running}}</td>"].join(""),
+			      body:["<td class='name'>{{name}}</td>",
+                  "<td class='port'>{{port}}</td>",
+  		            "<td class='status'>{{running}}</td>"].join(""),
   		      header: ["<th>name</th>",
   		               "<th>port</th>",
   		               "<th>app-status</th>",
   		               "<th>action</th>"].join("")
 			    },
 			    appdomains: {
-			      body:["<td>{{domain}}</td>",
-                  "<td>{{appname}}</td>"].join(""),
+			      body:["<td class='domain'>{{domain}}</td>",
+                  "<td class='appname'>{{appname}}</td>"].join(""),
   		      header: ["<th>domain</th>",
   		               "<th>appname</th>",
   		               "<th>action</th>"].join("")
@@ -107,14 +107,12 @@ Array.prototype.clean = function(deleteValue) {
 	    type:"PUT",
 	    data:data,
 	    success:function(r) {
-	      console.log(r);
 	      if(r.status == "success") {
   	      // since href can be /apps or /appdomains
   	      switch(href.split("/")[1]) {
   	        case 'app':
   	          var $tRow = $this.parent().parent();
-  	          $tRow.find(".pid").text(r.pid); // change pid
-  	          $tRow.find(".running").text(r.running); // change running
+  	          $tRow.find(".status").text(r.running); // change running
   	        break;
   	        case 'appdomains':
 	        
@@ -170,7 +168,7 @@ Array.prototype.clean = function(deleteValue) {
 	                  "<p>port - {{port}}</p>",
 	                  "<p>gitrepo - {{gitrepo}}</p>",
 	                  "<p>start file - {{start}}</p>",
-	                  "<p>app status - {{status}}</p>",
+	                  "<p>app status - {{running}}</p>",
 	                  "<p>process id - {{pid}}</p>"].join("");
     // remove put from rel --- temporary
 	  $this.attr("rel", "");
