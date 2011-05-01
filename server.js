@@ -16,7 +16,7 @@ app.configure(function(){
   app.use(express.bodyParser()); // parse body
   app.use(express.methodOverride()); // ??
 	app.use(express.cookieParser()); // cookie parser
-	app.use(express.session({key :"ns",secret: "keyboard cat" })); // session store (NOTE cookieParser should be b4 this)
+	app.use(express.session({key :"ns",secret: "" })); // session store (NOTE cookieParser should be b4 this)
   app.use(app.router); // use the router
 });
 
