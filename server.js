@@ -1,8 +1,8 @@
 var express = require('express'),
 		cauth= require('connect-auth'),
-		auth = require('./auth'),
-		encode = require('./encoding')
-		nodester = require('./nodester-api');
+		auth = require('./lib/auth'),
+		encode = require('./lib/encoding')
+		nodester = require('./lib/nodester-api');
 
 var app = module.exports = express.createServer();
 
@@ -10,7 +10,6 @@ var app = module.exports = express.createServer();
 app.configure(function(){
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-	//app.use(express.static(__dirname + '/public'));
 	app.use(cauth(auth.auth())); // connect-auth with my custom auth
 	app.use(express.logger()); // enable logger
   app.use(express.bodyParser()); // parse body
@@ -36,7 +35,6 @@ function checkAuth(req,res,next) {
 	req.is_logged = false;
 	// if key=>cred is present in session
 	// then user is logged in
-	// --- Need to write logged in session 
 	// after verification frm nodester
 	if(req.session && req.session.cred) {
 		// get from session
