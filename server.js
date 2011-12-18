@@ -81,6 +81,7 @@ app.get('/login',checkAuth, function(req,res) {
 app.post('/login',checkAuth, function(req,res, next) {
 	// check whether user is logged in ?
 	// then log him out
+
 	if(req.is_logged == true) {
 		res.redirect('/');
 	} else {
@@ -88,8 +89,8 @@ app.post('/login',checkAuth, function(req,res, next) {
 	  if(!req.body.user || req.body.user.user == "" && req.body.user.pass == "") {
 	    res.redirect("/login?action=incomplete");
 	    return;
-    }
-	  
+	    }
+	  	
 	  // encode username and password in base64
 		req.user = {
 		  creds:encode.base64(req.body.user.user + ":" + req.body.user.pass),

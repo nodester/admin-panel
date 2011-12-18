@@ -5,11 +5,11 @@
       p
         label(for="user[user]") 
           span.label Username:
-          input(type:"text", name:"user[user]", class:"input r5 " + ((action) ? "error" : ""))
+          input(type="text", name="user[user]", class="input r5 " + ((action) ? "error" : ""))
       p
         label(for="user[pass]")
           span.label Password:
-          input(type:"password", name:"user[pass]", class:"input r5 " + ((action) ? "error" : ""))
+          input(type="password", name="user[pass]", class="input r5 " + ((action) ? "error" : ""))
       p.buttons
           input.submit.r5.bluegrad(type="submit", value="Login")
       -if(action == "failed")
