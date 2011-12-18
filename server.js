@@ -24,7 +24,8 @@ app.configure('development', function(){
 });
 
 app.configure('production', function(){
-  app.use(express.errorHandler()); 
+  // app.use(express.errorHandler()); 
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
 });
 
 var static_routing = express.static(__dirname + '/public',{ maxAge: "6000000" });
