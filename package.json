@@ -1,10 +1,10 @@
 {
   "author": "rowoot",
-  "name": "nodester_admin",
+  "name": "nodester-admin",
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "ec2-user@nodester.com:/node/hosted_apps/rowoot/1498-460f957a53eb6348b7077e2289eb7868.git"
+    "url": "git@github.com:nodester/admin-panel.git"
   },
   "main": "server.js",
   "directories": {
@@ -14,10 +14,6 @@
     "connect":">=v1.4.0",
     "express":">=v2.3.2",
     "connect-auth":">=0.2.2"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "start": "node server.js"
   },
   "description": "admin interface for nodester"
 }
