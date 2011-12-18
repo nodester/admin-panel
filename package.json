@@ -10,9 +10,6 @@
   "directories": {
     "lib": "."
   },
-  "engines": {
-    "node": "0.4.12"
-  },
   "dependencies": {
     "connect":">=v1.4.0",
     "express":">=v2.3.2",
