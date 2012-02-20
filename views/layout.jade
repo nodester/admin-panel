@@ -2,43 +2,46 @@
 html
   head
     title= title
-    meta(http-equiv='content-type', content='text/html; charset=UTF-8')
+    meta(charset='UTF-8')
+    meta(http-equiv='Content-Type', content='text/html;charset=utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=Edge,chrome=1')
+    link(rel='icon', href='/static/i/favicon.ico')
     link(rel='shortcut icon', href='/static/i/favicon.ico')
-    
     link(rel='stylesheet', href='/static/stylesheets/style.css')
-    script
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-23005703-1']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")
+    // if lt IE 9
+      script(src='/static/js/html5.js')
   body
-    h1 Nodester Admin Panel
-    - if(is_logged)
-      p.log_info
-        | Howdy <strong>#{user}</strong> ! 
-        a(href="/logout") Logout
-  
-    #content_wrapper
+      header
+        h1 Nodester Admin Panel
       - if(is_logged)
-        .sidebar.fl
-          != partial("sidebar")
-      .content.fl
-        != body
-      .cl
-    footer
-      p <strong>NOTE</strong>: <br /> This project is work in progress, <br /> kindly file issues/pull requests to 
-        a(href='http://github.com/nodester/admin-panel',target="_blank") http://github.com/nodester/admin-panel
-      p Special Thanks to the creators of <a target="_blank" href='http://nodester.com'>Nodester.com</a> for this brilliant Platform :)
-      p - by <a href="http://twitter.com/michealbenedict" target="_blank">@michealbenedict</a> for <a href="http://twitter.com/nodester" target="_blank">@nodester</a>
-    #modal.modal
-      .close [x]
-      #modal_content
-      
-  script(src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")
+        p.log_info
+          | Howdy <strong>#{user}</strong> ! 
+          a(href="/logout") Logout
+      #content_wrapper
+        - if(is_logged)
+          .sidebar.fl
+            != partial("sidebar")
+        .content
+          != body
+        .cl
+      footer
+        p <strong>NOTE</strong>: <br /> This project is work in progress, <br /> kindly file issues/pull requests to 
+          a(href='http://github.com/nodester/admin-panel',target="_blank") http://github.com/nodester/admin-panel
+        p Special Thanks to the creators of <a target="_blank" href='http://nodester.com'>Nodester.com</a> for this brilliant Platform :)
+        p - by <a href="http://twitter.com/michealbenedict" target="_blank">@michealbenedict</a> and <a href="http://twitter.com/crp_underground" target="_blank">@crp_underground</a> for <a href="http://twitter.com/nodester" target="_blank">@nodester</a>
+      #modal.modal
+        .close [x]
+        #modal_content
   script(src="/static/javascripts/mu.js")
   script(src="/static/javascripts/jq.modal.js")
   script(src="/static/javascripts/n.js")
+  script
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-23005703-1']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();

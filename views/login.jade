@@ -1,18 +1,19 @@
 .login_wrap
   form(method="post",action="/login")
     fieldset
-      legend Login using your Nodester.com Credentials
       p
-        label(for="user[user]") 
-          span.label Username:
-          input(type="text", name="user[user]", class="input r5 " + ((action) ? "error" : ""))
+          input(type="text", name="user[user]", placeholder="Login here...", class="input r5 " + ((action) ? "error" : ""))
       p
-        label(for="user[pass]")
-          span.label Password:
-          input(type="password", name="user[pass]", class="input r5 " + ((action) ? "error" : ""))
+          input(type="password", name="user[pass]", placeholder="and your password.", class="input r5 " + ((action) ? "error" : ""))
       p.buttons
           input.submit.r5.bluegrad(type="submit", value="Login")
-      -if(action == "failed")
-        p#failed.msg.r5 Authorization Failed ! Do you have an account ?
-      -else if(action == "incomplete")
-        p#incomplete.msg.r5 Either username or password was blank.
+   -if(action == "failed")
+       p#failed.msg.r5.hide Authorization Failed ! Do you have an account ?
+   -else if(action == "incomplete")
+       p#incomplete.msg.r5.hide Either username or password was blank.
+script
+  $(function(){
+     $('#failed').fadeIn();
+     $('#incomplete').fadeIn();
+     $('input[type="text"]').focus();
+  });
