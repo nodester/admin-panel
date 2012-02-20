@@ -19,7 +19,6 @@ footer, header, nav, section, audio, video {
 }
 
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   color:#4b4b4b;
 }
@@ -58,13 +57,13 @@ a {
 .cl {
 	clear:both;
 }
-
 #content_wrapper {
   padding-top:1.4em;
-  min-height:250px;
+  min-height:300px;
 }
 
 .sidebar {
+	margin: 0 30px;
 	width:200px;
 }
 
@@ -108,25 +107,33 @@ ul.lnav > li.active ul.snav {
   display:block;
 }
 
-
-
 .login_wrap {
   width:420px;
+  margin: 0 auto;
+  background-color: #fff;
+  box-shadow: 3px 3px 5px #333;
+  -webkit-box-shadow: 3px 3px 5px #333;
+  -moz-box-shadow: 3px 3px 5px #333;
+  -o-box-shadow: 3px 3px 5px #333;
+  border:1px solid #ddd;
+  border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -o-border-radius: 7px;
+  padding:5px 20px 15px;
+  margin-top: -50px;
+  text-align:center;
 }
 
 span.label {
   display:block;
 }
 
-fieldset {
-  border:1px solid #ddd;
-  padding:5px 20px 15px;
-}
-
 .input {
   border:1px solid #ccc;
-  font-size:16px;
-  padding:5px;
+  font-size:18px;
+  padding:10px;
+  width: 90%;
   -moz-box-shadow: -2px 2px 4px rgba(0,0,0,0.1) inset;
   -webkit-box-shadow: 2px 2px 4px rgba(0,0,0,0.1) inset inset;
   -o-box-shadow: 2px 2px 4px rgba(0,0,0,0.1) inset inset;
@@ -138,9 +145,9 @@ input.error {
 }
 
 .submit {
-  font-size:12px;
+  font-size:18px;
   font-weight:700;
-  padding:5px 10px;
+  padding:10px 50px;
   color:#fff;
   border:0;
   text-shadow:0 -1px 1px rgba(0,0,0,0.3);
@@ -167,6 +174,8 @@ input.error {
 
 p.log_info {
   font-size:12px;
+  margin-right: 20px;
+  text-align: right;
 }
 
 p.msg {
@@ -181,6 +190,8 @@ p#incomplete {
   background:firebrick;
   color:#fff;
 }
+
+.hide{display: none;}
 
 .r5 {
   -moz-border-radius: 5px;
@@ -199,9 +210,9 @@ p#incomplete {
   font-size:12px;
   margin: 0;
   margin-bottom: 1em;
-  width:100%;
+  width:99%;
 }
-
+.tree{width:75%;}
 .tree th,
 .table th {
   font-weight: normal;
@@ -219,8 +230,24 @@ p#incomplete {
   text-align:center;
 }
 
+header{
+	padding: 60px 0;
+	text-align: center;
+	border-bottom: 1px solid #FFF;
+	box-shadow: 3px 7px 5px #DDD;
+    -webkit-box-shadow: 3px 7px 5px #DDD;
+    -moz-box-shadow: 3px 7px 5px #DDD;
+    -o-box-shadow: 3px 7px 5px #DDD;
+	background: #F2F2F2 url('/static/i/rocket-logo.png') 20px 0px no-repeat;
+}
+header h1 {
+	font-size: 2.8em;
+	text-shadow: 1px 1px 1px #FFF;
+	color: #000;
+}
+
 footer {
-  margin-top:2em;
+  margin:2em 0 2em 2em;
   font-size:12px;
 }
 
