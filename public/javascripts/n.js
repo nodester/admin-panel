@@ -145,17 +145,16 @@ Array.prototype.clean = function(deleteValue) {
 	  var $this = $(this),
 	      href = $this.attr("href"),
 	      thisHtml = $this.html(),
-	      thisCss = $this.attr("class"),
-	      data = JSON.parse($this.attr("data-params"));
+	      thisCss = $this.attr("class");
 	  // remove put from rel --- temporary
     $this.removeAttr("rel").removeAttr("class");
     $this.html(Helper.inlineLoader($this)); //loader 
 	  $.ajax({
 	    url:"/api" + href ,
-	    type:"DELETE",
-	    data:data,
+	    type:"DELETE", 
 	    success:function(r) {
 	      if(r.status && r.status == "success") {
+			alert('YUS');
 	        //window.location = "/apps";
 	      } else {
 	        // error
@@ -212,7 +211,7 @@ Array.prototype.clean = function(deleteValue) {
 	      $modal = $("#modal"),
 	      appname = $this.attr("data-params"),
 	      modal_template = {
-	        app_info : ["<h2>About <strong>" + appname + "</strong></h2>",
+	        app_info : ["<h2>About The App :: <strong>" + appname + "</strong></h2>",
   	                  "<table cellpadding=0 cellspacing=0 class='table'>",
   	                  "<tr><td class='label'>port</td><td>{{port}}</td></tr>",
   	                  "<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>",
@@ -220,7 +219,7 @@ Array.prototype.clean = function(deleteValue) {
   	                  "<tr><td class='label'>app status</td><td>{{running}}</td></tr>",
   	                  "<tr><td class='label'>process id</td><td>{{pid}}</td></tr>",
   	                  "</table>",
-  	                  "<p><a href='/app/{{appname}}' data-params='" + JSON.stringify({appname: appname}) + "' class='submit r5 redgrad no_u' rel='delete'>Destroy App</a></p>"].join(""),
+  	                  "<p><a href='/app/" + appname + "' data-params='" + JSON.stringify({appname: appname}) + "' class='submit r5 redgrad no_u' rel='delete'>Destroy App</a></p>"].join(""),
   	      app_create : ["<h2>Create new app</h2>",
   	                    "<form method='post' action='/app' class='form'>",
                 	      "<table cellpadding=0 cellspacing=0 class='table'>",
