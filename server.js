@@ -134,6 +134,7 @@ app.post('/login', checkAuth, function (req, res, next) {
 // Need to figure out REGEX - done
 app.all("/api/*", checkAuth, function (req, res, next) {
   var params = "";
+console.log('a request of verb ' + req.method);
   // based on verb, get params
   if (req.is_logged === true) {
     if (req.method == "GET") {
@@ -141,6 +142,7 @@ app.all("/api/*", checkAuth, function (req, res, next) {
     } else {
       params = req.body;
     }
+
     // method, api path, data, credentials, callback
     nodester.request(req.method, req.params[0], params, req.user.creds, function (response) {
       res.header('Content-Type', 'application/json');

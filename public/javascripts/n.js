@@ -151,7 +151,7 @@ Array.prototype.clean = function(deleteValue) {
     $this.removeAttr("rel").removeAttr("class");
     $this.html(Helper.inlineLoader($this)); //loader 
 	  $.ajax({
-	    url:"/api" + href + "/" + data.appname,
+	    url:"/api" + href ,
 	    type:"DELETE",
 	    data:data,
 	    success:function(r) {
@@ -220,7 +220,7 @@ Array.prototype.clean = function(deleteValue) {
   	                  "<tr><td class='label'>app status</td><td>{{running}}</td></tr>",
   	                  "<tr><td class='label'>process id</td><td>{{pid}}</td></tr>",
   	                  "</table>",
-  	                  "<p><a href='/app' data-params='" + JSON.stringify({appname: appname}) + "' class='submit r5 redgrad no_u' rel='delete'>Destroy</a></p>"].join(""),
+  	                  "<p><a href='/app/{{appname}}' data-params='" + JSON.stringify({appname: appname}) + "' class='submit r5 redgrad no_u' rel='delete'>Destroy</a></p>"].join(""),
   	      app_create : ["<h2>Create new app</h2>",
   	                    "<form method='post' action='/app' class='form'>",
                 	      "<table cellpadding=0 cellspacing=0 class='table'>",
