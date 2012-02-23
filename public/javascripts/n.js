@@ -211,7 +211,7 @@ Array.prototype.clean = function(deleteValue) {
 	      $modal = $("#modal"),
 	      appname = $this.attr("data-params"),
 	      modal_template = {
-	        app_info : ["<h2>About The App :: <strong>" + appname + "</strong></h2>",
+	        app_info : ["<h2>About <strong>" + appname + "</strong></h2>",
   	                  "<table cellpadding=0 cellspacing=0 class='table'>",
   	                  "<tr><td class='label'>port</td><td>{{port}}</td></tr>",
   	                  "<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>",
@@ -247,7 +247,7 @@ Array.prototype.clean = function(deleteValue) {
 	        $.ajax({
 	          url: "/api" + href,
 	          type:"post",
-	          data: {appname:$("#params_appname").val(), start:$("#params_start").val()},
+	          data: {appname:$("#params_appname").val().toLowerCase(), start:$("#params_start").val()},
 	          success: function(r) {
 	            if(r.status && r.status == "success") {
 	              $("a[href='/apps']").trigger("click"); // refresh app list
