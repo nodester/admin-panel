@@ -161,6 +161,12 @@ Array.prototype.clean = function(deleteValue) {
 	        // error
 	      }
 	    },
+	    error: function(jqXHR, textStatus, errorThrown){
+			console.log('error');
+			console.log(jqXHR);
+			console.log(textStatus);
+			console.log(errorThrown);
+		},
       complete:function() {
 	      $this.attr("rel", "put").attr("class",thisCss);
 	      $this.html(thisHtml);
