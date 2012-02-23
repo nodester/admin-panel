@@ -156,7 +156,7 @@ Array.prototype.clean = function(deleteValue) {
 	    data:data,
 	    success:function(r) {
 	      if(r.status && r.status == "success") {
-	        window.location = "/apps";
+	        //window.location = "/apps";
 	      } else {
 	        // error
 	      }
