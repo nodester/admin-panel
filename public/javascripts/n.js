@@ -153,9 +153,8 @@ Array.prototype.clean = function(deleteValue) {
 	    url:"/api" + href ,
 	    type:"DELETE", 
 	    success:function(r) {
-	      if(r.status && r.status == "success") {
-			alert('YUS');
-	        //window.location = "/apps";
+	      if(r.status && r.status == "success") { 
+	        window.location = "/apps";
 	      } else {
 	        // error
 	      }
