@@ -151,7 +151,7 @@ Array.prototype.clean = function(deleteValue) {
     $this.removeAttr("rel").removeAttr("class");
     $this.html(Helper.inlineLoader($this)); //loader 
 	  $.ajax({
-	    url:"/api" + href,
+	    url:"/api" + href + "/" + data.appname,
 	    type:"DELETE",
 	    data:data,
 	    success:function(r) {
