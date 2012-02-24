@@ -172,6 +172,6 @@ app.get("*", checkAuth, function (req, res) {
 
 // Only listen on $ node app.js
 if (!module.parent) {
-  app.listen(13032);
+  app.listen(process.env["port"] ? process.env["port"] : 13032);
   console.log("Express server listening on port %d", app.address().port);
 }
