@@ -326,3 +326,12 @@ footer p {
 .no_u {
   text-decoration:none;
 }
+.swap > input {
+	display:none;
+}
+.swap > span {
+	cursor:pointer;
+	text-decoration:underline;
+	display:inline-block;
+	min-width:120px;
+}

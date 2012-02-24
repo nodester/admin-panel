@@ -191,6 +191,29 @@ Array.prototype.clean = function(deleteValue) {
 		return false;
 	});
 
+	$(".swap > span").live("click", function(e){
+		
+		$(this).hide().next().show().focus();
+		
+	});
+	$(".swap > input").live("change", function(e){
+		var $input = $(this),
+			val = $input.val(),
+			data = $input.data('params');
+			data.start = val;
+		$.ajax({
+			url: "/api/app",
+			type: "PUT",
+			data: data,
+			success: function(r) {
+				alert('You will need to restart server for change');
+			}
+		})
+		$(this).hide().prev().html(val).show();
+		
+	});
+
+
 	// Click Event to display Modal Box
 	// Methods
 	// SHow Information about APP
@@ -202,7 +225,18 @@ Array.prototype.clean = function(deleteValue) {
 			$modal = $("#modal"),
 			appname = $this.attr("data-params"),
 			modal_template = {
-			app_info: ["<h2>About <strong>" + appname + "</strong></h2>", "<table cellpadding=0 cellspacing=0 class='table'>", "<tr><td class='label'>port</td><td>{{port}}</td></tr>", "<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>", "<tr><td class='label'>start file</td><td>{{start}}</td></tr>", "<tr><td class='label'>app status</td><td>{{running}}</td></tr>", "<tr><td class='label'>process id</td><td>{{pid}}</td></tr>", "</table>", "<p><a href='/app/" + appname + "' data-params='" + JSON.stringify({
+			app_info: ["<h2>About <strong>" + appname + "</strong></h2>", 
+			"<table cellpadding=0 cellspacing=0 class='table'>", 
+			"<tr><td class='label'>port</td><td>{{port}}</td></tr>",
+			"<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>", 
+			"<tr><td class='label'>start file</td><td class='swap'><span>{{start}}</span>",
+			"<input type='text' value='{{start}}' data-params='" + JSON.stringify({
+				appname: appname
+			})+ "' /></td></tr>", 
+			"<tr><td class='label'>app status</td><td>{{running}}</td></tr>", 
+			"<tr><td class='label'>process id</td><td>{{pid}}</td></tr>", 
+			"</table>", 
+			"<p><a href='/app/" + appname + "' data-params='" + JSON.stringify({
 				appname: appname
 			}) + "' class='submit r5 redgrad no_u' rel='delete'>Destroy App</a></p>"].join(""),
 			app_create: ["<h2>Create new app</h2>", "<form method='post' action='/app' class='form'>", "<table cellpadding=0 cellspacing=0 class='table'>", "<tr><td class='form_label'>app name</td>", "<td><input class='input r5' name='params_appname' id='params_appname' /></td></tr>", "<tr><td class='form_label'>start file<br /></td>", "<td><input class='input r5' name='params_start' id='params_start' /></td></tr>", "</table>", "<input type='submit' class='submit r5 bluegrad' value='Create' />", '<p id="failed" class="msg r5" style="display:none; margin-top:10px" ></p>', "</form>"].join("")
