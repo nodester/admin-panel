@@ -145,22 +145,26 @@ Array.prototype.clean = function(deleteValue) {
 	  var $this = $(this),
 	      href = $this.attr("href"),
 	      thisHtml = $this.html(),
-	      thisCss = $this.attr("class"),
-	      data = JSON.parse($this.attr("data-params"));
+	      thisCss = $this.attr("class");
 	  // remove put from rel --- temporary
     $this.removeAttr("rel").removeAttr("class");
     $this.html(Helper.inlineLoader($this)); //loader 
 	  $.ajax({
-	    url:"/api" + href,
-	    type:"DELETE",
-	    data:data,
+	    url:"/api" + href ,
+	    type:"DELETE", 
 	    success:function(r) {
-	      if(r.status && r.status == "success") {
+	      if(r.status && r.status == "success") { 
 	        window.location = "/apps";
 	      } else {
 	        // error
 	      }
 	    },
+	    error: function(jqXHR, textStatus, errorThrown){
+			console.log('error');
+			console.log(jqXHR);
+			console.log(textStatus);
+			console.log(errorThrown);
+		},
       complete:function() {
 	      $this.attr("rel", "put").attr("class",thisCss);
 	      $this.html(thisHtml);
@@ -214,7 +218,7 @@ Array.prototype.clean = function(deleteValue) {
   	                  "<tr><td class='label'>app status</td><td>{{running}}</td></tr>",
   	                  "<tr><td class='label'>process id</td><td>{{pid}}</td></tr>",
   	                  "</table>",
-  	                  "<p><a href='/app' data-params='" + JSON.stringify({appname: appname}) + "' class='submit r5 redgrad no_u' rel='delete'>Destroy</a></p>"].join(""),
+  	                  "<p><a href='/app/" + appname + "' data-params='" + JSON.stringify({appname: appname}) + "' class='submit r5 redgrad no_u' rel='delete'>Destroy App</a></p>"].join(""),
   	      app_create : ["<h2>Create new app</h2>",
   	                    "<form method='post' action='/app' class='form'>",
                 	      "<table cellpadding=0 cellspacing=0 class='table'>",
@@ -242,7 +246,7 @@ Array.prototype.clean = function(deleteValue) {
 	        $.ajax({
 	          url: "/api" + href,
 	          type:"post",
-	          data: {appname:$("#params_appname").val(), start:$("#params_start").val()},
+	          data: {appname:$("#params_appname").val().toLowerCase(), start:$("#params_start").val()},
 	          success: function(r) {
 	            if(r.status && r.status == "success") {
 	              $("a[href='/apps']").trigger("click"); // refresh app list
