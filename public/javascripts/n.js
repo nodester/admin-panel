@@ -225,7 +225,8 @@ Array.prototype.clean = function(deleteValue) {
 			$modal = $("#modal"),
 			appname = $this.attr("data-params"),
 			modal_template = {
-			app_info: ["<h2>About <strong>" + appname + "</strong></h2>", 
+				applogs: "{{#lines}}{{.}}<br />{{/lines}}",
+				app_info: ["<h2>About <strong>" + appname + "</strong></h2>", 
 			"<table cellpadding=0 cellspacing=0 class='table'>", 
 			"<tr><td class='label'>port</td><td>{{port}}</td></tr>",
 			"<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>", 
@@ -278,8 +279,13 @@ Array.prototype.clean = function(deleteValue) {
 					});
 				}
 			});
+			
+			
+			
+			
 			return;
 		}
+		
 		// remove put from rel --- temporary
 		$this.attr("rel", "");
 		// show Loader on the spot
@@ -288,6 +294,11 @@ Array.prototype.clean = function(deleteValue) {
 			url: "/api" + href,
 			success: function(r) {
 				if (r.status == "success") {
+					
+					if(modal_type ==='applogs'){
+ 
+					}
+					console.log(r);
 					$modal.modal({
 						content: Mustache.to_html(modal_template[modal_type], r)
 					});
@@ -347,8 +358,13 @@ Array.prototype.clean = function(deleteValue) {
 								appname: "{{name}}",
 								running: false
 							});
+							
 							// actions template
-							var actions_template = ["<a href='/app' data-params='" + start_action + "' rel='put'>start</a>", "<a href='/app' data-params='" + stop_action + "' rel='put'>stop</a>", "<a href='/app/{{name}}' data-params='{{name}}' class='app_info' rel='modal'>info</a>"].join(" ");
+							var actions_template = ["<a href='/app' data-params='" + start_action + "' rel='put'>start</a>", 
+							"<a href='/app' data-params='" + stop_action + "' rel='put'>stop</a>", 
+							"<a href='/applogs/{{name}}' data-params='{{name}}' class='applogs' rel='modal'>logs</a>", 
+							"<a href='/app/{{name}}' data-params='{{name}}' class='app_info' rel='modal'>info</a>",
+							].join(" ");
 							req_vars.template.body = req_vars.template.body.replace("{{actions}}", actions_template);
 							break;
 							// Actions for app domains
