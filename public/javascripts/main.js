@@ -9,22 +9,34 @@ var App = Backbone.Model.extend({
 });
 
 var Apps = Backbone.Collection.extend({
-	model: App
+	model: App,
+	url: '/api/apps'
 });
+
+var apps = new Apps;
 
 
 // Views
 // -----
-var AppView = Backbone.Views.extend({
+var AppView = Backbone.View.extend({
 });
 
-var AppListView = Backbone.Views.extend({
+var AppListView = Backbone.View.extend({
+	initialize: function() {
+		this.render();
+	},
+
+	render: function() {
+		apps.fetch();
+	}
 });
 
-var DomainListView = Backbone.Views.extend({
+var DomainListView = Backbone.View.extend({
 });
 
-var MainView = Backbone.Views.extend({
+// This structure seems redundant now... but it will make sense once MainView
+// is fleshed out
+var MainView = Backbone.View.extend({
 	initialize: function() {
 		this.render();
 	},
