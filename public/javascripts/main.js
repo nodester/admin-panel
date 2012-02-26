@@ -25,6 +25,14 @@ var DomainListView = Backbone.Views.extend({
 });
 
 var MainView = Backbone.Views.extend({
+	initialize: function() {
+		this.render();
+	},
+
+	render: function() {
+		new AppListView;
+	}
+
 });
 
 
