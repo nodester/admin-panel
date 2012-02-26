@@ -22,12 +22,19 @@ var AppView = Backbone.View.extend({
 });
 
 var AppListView = Backbone.View.extend({
+
 	initialize: function() {
-		this.render();
+		this.tmpl = $('#app-body-tmpl').html();
+		this.collection.fetch();
+		this.collection.on('reset', this.render, this);
 	},
 
-	render: function() {
-		apps.fetch();
+	render: function(apps) {
+		console.log('rendered!');
+		var html = Mustache.to_html(this.tmpl, {items: apps.toJSON()});
+		console.log(html);
+		$('.tree').html(html).fadeIn('fast');
+
 	}
 });
 
@@ -42,7 +49,7 @@ var MainView = Backbone.View.extend({
 	},
 
 	render: function() {
-		new AppListView;
+		new AppListView({collection: apps});
 	}
 
 });
