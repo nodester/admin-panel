@@ -35,10 +35,9 @@ Array.prototype.clean = function(deleteValue) {
 			}
 		};
 
-		// Main Links
-		// Apps List
-		// AppDomain List
+		// "My Apps" & "My Domains" links
 		$("a[rel='main']").click(function(e) {
+			console.log('rel main link clicked!');
 			e.preventDefault(); // prevent defailt
 			// init vars
 			var $this = $(this),
@@ -49,15 +48,11 @@ Array.prototype.clean = function(deleteValue) {
 				path: Helper.getPath(href)
 			};
 
-			//remove active class
 			$(".lnav .active").removeClass("active");
 			// push state of page
 			history.pushState(curr_page, null, curr_page.uri);
-			// add active class
 			$this.parent().addClass("active");
-			// fadeout tree
 			$tree.fadeOut('fast', function() {
-				// show loader
 				$loader.fadeIn('fast');
 			});
 
@@ -74,16 +69,18 @@ Array.prototype.clean = function(deleteValue) {
 
 			return false;
 		}); // end onclick
+
 		// default view to be loaded
 		if (curr_path == "/") $("#my_apps").trigger('click');
 		else $("a[href='" + curr_path + "']").trigger('click');
 
 	}); // end doc ready
+
 	// Click event for links with method=PUT
 	// Methods
 	// Update User
 	// curl -X PUT -u "testuser:123" -d "password=test" http://api.nodester.com/user
-	// curl -X PUT -u "testuser:123" -d "rsakey=1234567" http://api.nodester.com/user	
+	// curl -X PUT -u "testuser:123" -d "rsakey=1234567" http://api.nodester.com/user
 	// Change application details (start|stop|restart) and app_details
 	// curl -X PUT -u "testuser:123" -d "appname=a&running=true" http://api.nodester.com/app
 	// curl -X PUT -u "testuser:123" -d "appname=a&start=hello1.js" http://api.nodester.com/app
@@ -141,7 +138,7 @@ Array.prototype.clean = function(deleteValue) {
 			thisCss = $this.attr("class");
 		// remove put from rel --- temporary
 		$this.removeAttr("rel").removeAttr("class");
-		$this.html(Helper.inlineLoader($this)); //loader 
+		$this.html(Helper.inlineLoader($this)); //loader
 		$.ajax({
 			url: "/api" + href,
 			type: "DELETE",
@@ -192,9 +189,9 @@ Array.prototype.clean = function(deleteValue) {
 	});
 
 	$(".swap > span").live("click", function(e){
-		
+
 		$(this).hide().next().show().focus();
-		
+
 	});
 	$(".swap > input").live("change", function(e){
 		var $input = $(this),
@@ -210,7 +207,7 @@ Array.prototype.clean = function(deleteValue) {
 			}
 		})
 		$(this).hide().prev().html(val).show();
-		
+
 	});
 
 
@@ -226,17 +223,17 @@ Array.prototype.clean = function(deleteValue) {
 			appname = $this.attr("data-params"),
 			modal_template = {
 				applogs: "{{#lines}}{{.}}<br />{{/lines}}",
-				app_info: ["<h2>About <strong>" + appname + "</strong></h2>", 
-			"<table cellpadding=0 cellspacing=0 class='table'>", 
+				app_info: ["<h2>About <strong>" + appname + "</strong></h2>",
+			"<table cellpadding=0 cellspacing=0 class='table'>",
 			"<tr><td class='label'>port</td><td>{{port}}</td></tr>",
-			"<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>", 
+			"<tr><td class='label'>gitrepo</td><td>{{gitrepo}}</td></tr>",
 			"<tr><td class='label'>start file</td><td class='swap'><span>{{start}}</span>",
 			"<input type='text' value='{{start}}' data-params='" + JSON.stringify({
 				appname: appname
-			})+ "' /></td></tr>", 
-			"<tr><td class='label'>app status</td><td>{{running}}</td></tr>", 
-			"<tr><td class='label'>process id</td><td>{{pid}}</td></tr>", 
-			"</table>", 
+			})+ "' /></td></tr>",
+			"<tr><td class='label'>app status</td><td>{{running}}</td></tr>",
+			"<tr><td class='label'>process id</td><td>{{pid}}</td></tr>",
+			"</table>",
 			"<p><a href='/app/" + appname + "' data-params='" + JSON.stringify({
 				appname: appname
 			}) + "' class='submit r5 redgrad no_u' rel='delete'>Destroy App</a></p>"].join(""),
@@ -244,7 +241,7 @@ Array.prototype.clean = function(deleteValue) {
 		},
 			modal_type = $this.attr("class");
 
-		// to render forms    
+		// to render forms
 		if (modal_type == "app_create") {
 			$modal.modal({
 				content: modal_template.app_create,
@@ -279,13 +276,10 @@ Array.prototype.clean = function(deleteValue) {
 					});
 				}
 			});
-			
-			
-			
-			
+
 			return;
 		}
-		
+
 		// remove put from rel --- temporary
 		$this.attr("rel", "");
 		// show Loader on the spot
@@ -294,9 +288,9 @@ Array.prototype.clean = function(deleteValue) {
 			url: "/api" + href,
 			success: function(r) {
 				if (r.status == "success") {
-					
+
 					if(modal_type ==='applogs'){
- 
+
 					}
 					console.log(r);
 					$modal.modal({
@@ -334,7 +328,7 @@ Array.prototype.clean = function(deleteValue) {
 					console.log(r);
 					// if r.status (for errors)
 					// if r.length (if not array or == 0)
-					// 
+					//
 					if (r.length === 0) {
 						callback("None");
 					} else if (r.status || r.length == 0) {
@@ -358,11 +352,11 @@ Array.prototype.clean = function(deleteValue) {
 								appname: "{{name}}",
 								running: false
 							});
-							
+
 							// actions template
-							var actions_template = ["<a href='/app' data-params='" + start_action + "' rel='put'>start</a>", 
-							"<a href='/app' data-params='" + stop_action + "' rel='put'>stop</a>", 
-							"<a href='/applogs/{{name}}' data-params='{{name}}' class='applogs' rel='modal'>logs</a>", 
+							var actions_template = ["<a href='/app' data-params='" + start_action + "' rel='put'>start</a>",
+							"<a href='/app' data-params='" + stop_action + "' rel='put'>stop</a>",
+							"<a href='/applogs/{{name}}' data-params='{{name}}' class='applogs' rel='modal'>logs</a>",
 							"<a href='/app/{{name}}' data-params='{{name}}' class='app_info' rel='modal'>info</a>",
 							].join(" ");
 							req_vars.template.body = req_vars.template.body.replace("{{actions}}", actions_template);
