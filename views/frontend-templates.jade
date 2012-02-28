@@ -10,10 +10,10 @@ script(id="app-tmpl", type="text/html")
   td.port {{port}}
   td.status {{running}}
   td.actions
-    a(href="/app", data-params="start_action", rel="put") start
-    a(href="/app", data-params="stop_action", rel="put") stop
-    a.applogs(href="/applogs/{{name}}", data-params="{{name}}", rel="modal") logs
-    a.app_info(href="/app/{{name}}", data-params="{{name}}", rel="modal") info
+    a.start(href="/app") start
+    a.stop(href="/app") stop
+    a.applogs(href="/applogs/{{name}}") logs
+    a.app_info(href="/app/{{name}}") info
 
 
 // script(id="app-body-tmpl", type="text/html")

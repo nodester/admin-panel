@@ -6,6 +6,10 @@
 var App = Backbone.Model.extend({
 	// properties: name, port, status
 	// actions: start, stop, show logs, show info, destroy
+	idAttribute: 'name',
+	// The Nodester API exposes individual apps at /app, while the list of apps
+	// is at /apps
+	url: function() { return '/api/app/' + this.id; }
 });
 
 var Apps = Backbone.Collection.extend({
@@ -20,13 +24,31 @@ var apps = new Apps;
 // -----
 var AppView = Backbone.View.extend({
 	tagName: 'tr',
+
+	events: {
+		'click .start': 'startApp',
+		'click .stop': 'stopApp',
+	},
+
 	initialize: function() {
 		this.tmpl = $('#app-tmpl').html();
+		// this.model.bind('change', this.render(), this);
 	},
+
 	render: function() {
 		var html = Mustache.to_html(this.tmpl, this.model.toJSON());
 		this.$el.html(html);
 		return this;
+	},
+
+	startApp: function(e) {
+		e.preventDefault();
+		this.model.set('running', true);
+		this.model.save();
+	},
+
+	stopApp: function() {
+
 	}
 });
 
