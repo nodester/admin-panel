@@ -1,20 +1,19 @@
-script(id="app-body-tmpl", type="text/html")
+script(id="app-list-tmpl", type="text/html")
   tr
     th name
     th port
     th app-status
     th action
-  {{#items}}
-  tr
-    td.name {{name}}
-    td.port {{port}}
-    td.status {{running}}
-    td.actions
-      a(href="/app", data-params="start_action", rel="put") start
-      a(href="/app", data-params="stop_action", rel="put") stop
-      a.applogs(href="/applogs/{{name}}", data-params="{{name}}", rel="modal") logs
-      a.app_info(href="/app/{{name}}", data-params="{{name}}", rel="modal") info
-  {{/items}}
+
+script(id="app-tmpl", type="text/html")
+  td.name {{name}}
+  td.port {{port}}
+  td.status {{running}}
+  td.actions
+    a(href="/app", data-params="start_action", rel="put") start
+    a(href="/app", data-params="stop_action", rel="put") stop
+    a.applogs(href="/applogs/{{name}}", data-params="{{name}}", rel="modal") logs
+    a.app_info(href="/app/{{name}}", data-params="{{name}}", rel="modal") info
 
 
 // script(id="app-body-tmpl", type="text/html")

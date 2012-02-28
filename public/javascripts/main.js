@@ -19,22 +19,34 @@ var apps = new Apps;
 // Views
 // -----
 var AppView = Backbone.View.extend({
+	tagName: 'tr',
+	initialize: function() {
+		this.tmpl = $('#app-tmpl').html();
+	},
+	render: function() {
+		var html = Mustache.to_html(this.tmpl, this.model.toJSON());
+		this.$el.html(html);
+		return this;
+	}
 });
 
 var AppListView = Backbone.View.extend({
-
 	initialize: function() {
-		this.tmpl = $('#app-body-tmpl').html();
+		this.tmpl = $('#app-list-tmpl').html();
 		this.collection.fetch();
 		this.collection.on('reset', this.render, this);
 	},
 
 	render: function(apps) {
-		console.log('rendered!');
-		var html = Mustache.to_html(this.tmpl, {items: apps.toJSON()});
-		console.log(html);
+		var html = Mustache.to_html(this.tmpl);
 		$('.tree').html(html).fadeIn('fast');
-
+		apps.each(function(app) {
+			console.log(app);
+			var view = new AppView({model: app});
+			$('.tree tbody').append(view.render().el);
+		});
+		console.log('rendered!');
+		return this;
 	}
 });
 
