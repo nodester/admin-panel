@@ -28,6 +28,7 @@ var AppView = Backbone.View.extend({
 	events: {
 		'click .start': 'startApp',
 		'click .stop': 'stopApp',
+		'click .applogs': 'showLogs'
 	},
 
 	initialize: function() {
@@ -51,6 +52,18 @@ var AppView = Backbone.View.extend({
 		e.preventDefault();
 		this.model.set('running', false);
 		this.model.save();
+	},
+
+	showLogs: function(e) {
+		e.preventDefault();
+		$.get('/api/applogs/' + this.model.id, function(res) {
+			var logTmpl = $('#log-tmpl').html();
+			var html = Mustache.to_html(logTmpl, {lines: res.lines});
+			$('#modal').modal({
+				content: html
+			});
+		});
+
 	}
 });
 

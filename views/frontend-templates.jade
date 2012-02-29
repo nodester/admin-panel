@@ -15,11 +15,8 @@ script(id="app-tmpl", type="text/html")
     a.applogs(href="/applogs/{{name}}") logs
     a.app_info(href="/app/{{name}}") info
 
-
-// script(id="app-body-tmpl", type="text/html")
-// script(id="app-body-tmpl", type="text/html")
-// script(id="app-body-tmpl", type="text/html")
-// script(id="app-body-tmpl", type="text/html")
-// script(id="app-body-tmpl", type="text/html")
-// script(id="app-body-tmpl", type="text/html")
-
+script(id="log-tmpl", type="text/html")
+  {{#lines}}
+  pre
+    {{.}}
+  {{/lines}}

@@ -197,8 +197,8 @@ p#incomplete {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
-  /* useful if you don't want a bg color from leaking outside the border: */        
-  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box; 
+  /* useful if you don't want a bg color from leaking outside the border: */
+  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
 }
 
 .tree,
@@ -228,6 +228,10 @@ p#incomplete {
   color: #484848;
   border-bottom: 1px solid #E1E1E1;
   text-align:center;
+}
+
+.tree .actions a {
+  margin-right: 8px;
 }
 
 header{
