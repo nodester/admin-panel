@@ -32,7 +32,7 @@ var AppView = Backbone.View.extend({
 
 	initialize: function() {
 		this.tmpl = $('#app-tmpl').html();
-		// this.model.bind('change', this.render(), this);
+		this.model.on('sync', this.render, this);
 	},
 
 	render: function() {
@@ -47,8 +47,10 @@ var AppView = Backbone.View.extend({
 		this.model.save();
 	},
 
-	stopApp: function() {
-
+	stopApp: function(e) {
+		e.preventDefault();
+		this.model.set('running', false);
+		this.model.save();
 	}
 });
 
