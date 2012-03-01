@@ -1,5 +1,8 @@
 (function() {
 
+// Global object
+window.panel = {};
+
 // Models & Collections
 // --------------------
 
@@ -18,6 +21,34 @@ var Apps = Backbone.Collection.extend({
 });
 
 var apps = new Apps;
+
+
+// Router
+// ------
+
+// Meh, not sure how to handle this yet,
+// and its utility seems minimal. Later.
+var Router = Backbone.Router.extend({
+	initialize: function() {
+		panel.appListView = new AppListView({collection: apps});
+		panel.domainListView = new DomainListView();
+		panel.appListView.render();
+	},
+
+	routes: {
+		'apps': 'apps',
+		'domains': 'domains'
+	},
+
+	apps: function() {
+		panel.appListView.render();
+	},
+
+	domains: function() {
+
+	}
+
+});
 
 
 // Views
@@ -71,14 +102,14 @@ var AppListView = Backbone.View.extend({
 	initialize: function() {
 		this.tmpl = $('#app-list-tmpl').html();
 		this.collection.fetch();
-		this.collection.on('reset', this.render, this);
+		// this.collection.on('reset', this.render, this);
 	},
 
-	render: function(apps) {
+	render: function() {
 		var html = Mustache.to_html(this.tmpl);
 		$('.tree').html(html).fadeIn('fast');
-		apps.each(function(app) {
-			console.log(app);
+		this.collection.each(function(app) {
+			// console.log(app);
 			var view = new AppView({model: app});
 			$('.tree tbody').append(view.render().el);
 		});
@@ -90,22 +121,10 @@ var AppListView = Backbone.View.extend({
 var DomainListView = Backbone.View.extend({
 });
 
-// This structure seems redundant now... but it will make sense once MainView
-// is fleshed out
-var MainView = Backbone.View.extend({
-	initialize: function() {
-		this.render();
-	},
-
-	render: function() {
-		new AppListView({collection: apps});
-	}
-
-});
-
 
 $(function() {
-	new MainView;
+	new Router;
+	Backbone.history.start({pushState: true});
 });
 
 })();
