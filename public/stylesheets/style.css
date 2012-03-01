@@ -235,14 +235,14 @@ p#incomplete {
 }
 
 header{
-	padding: 60px 0;
+	padding: 30px 0;
 	text-align: center;
 	border-bottom: 1px solid #FFF;
 	box-shadow: 3px 7px 5px #DDD;
     -webkit-box-shadow: 3px 7px 5px #DDD;
     -moz-box-shadow: 3px 7px 5px #DDD;
     -o-box-shadow: 3px 7px 5px #DDD;
-	background: #F2F2F2 url('/static/i/rocket-logo.png') 20px 0px no-repeat;
+	background: #F2F2F2 url('/static/i/rocket-logo-small.png') 30px 15px no-repeat;
 }
 header h1 {
 	font-size: 2.8em;
