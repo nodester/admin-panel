@@ -1,22 +1,25 @@
 script(id="app-list-tmpl", type="text/html")
-  tr
-    th name
-    th port
-    th app-status
-    th action
+	tr
+		th name
+		th port
+		th app-status
+		th action
 
 script(id="app-tmpl", type="text/html")
-  td.name {{name}}
-  td.port {{port}}
-  td.status {{running}}
-  td.actions
-    a.start(href="/app") start
-    a.stop(href="/app") stop
-    a.applogs(href="/applogs/{{name}}") logs
-    a.app_info(href="/app/{{name}}") info
+	td.name {{name}}
+	td.port {{port}}
+	td.status {{running}}
+	td.actions
+		a.start(href="/app") start
+		&nbsp;
+		a.stop(href="/app") stop
+		&nbsp;
+		a.applogs(href="/applogs/{{name}}") logs
+		&nbsp;
+		a.app_info(href="/app/{{name}}") info
 
 script(id="log-tmpl", type="text/html")
-  {{#lines}}
-  pre
-    {{.}}
-  {{/lines}}
+	{{#lines}}
+	pre
+		{{.}}
+	{{/lines}}
