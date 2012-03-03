@@ -8,6 +8,13 @@ window.panel = {};
 
 var App = Backbone.Model.extend({
 	// properties: name, port, status
+	defaults : {
+		"name" : "name",
+		"port" : 12345,
+		"running" : "true",
+		"gitrepo" : "",
+		"pid": 12345
+	},
 	// actions: start, stop, show logs, show info, destroy
 	idAttribute: 'name',
 	// The Nodester API exposes individual apps at /app, while the list of apps
@@ -30,22 +37,28 @@ var apps = new Apps;
 // and its utility seems minimal. Later.
 var Router = Backbone.Router.extend({
 	initialize: function() {
-		panel.appListView = new AppListView({collection: apps});
+		panel.appListView = {};
 		panel.domainListView = new DomainListView();
-		panel.appListView.render();
+		//panel.appListView.render();
 	},
 
 	routes: {
 		'apps': 'apps',
-		'domains': 'domains'
+		'domains': 'domains',
+		'login': 'login'
 	},
 
 	apps: function() {
+		panel.appListView = new AppListView({collection: apps});
 		panel.appListView.render();
 	},
 
 	domains: function() {
 
+	},
+
+	login: function(){
+		
 	}
 
 });
@@ -102,14 +115,14 @@ var AppListView = Backbone.View.extend({
 	initialize: function() {
 		this.tmpl = $('#app-list-tmpl').html();
 		this.collection.fetch();
-		// this.collection.on('reset', this.render, this);
+		this.collection.on('reset', this.render, this);
 	},
 
 	render: function() {
 		var html = Mustache.to_html(this.tmpl);
 		$('.tree').html(html).fadeIn('fast');
 		this.collection.each(function(app) {
-			// console.log(app);
+			console.log(app);
 			var view = new AppView({model: app});
 			$('.tree tbody').append(view.render().el);
 		});

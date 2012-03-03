@@ -119,7 +119,7 @@ app.post('/login', checkAuth, function(req, res, next) {
 				// set session
 				console.log('success');
 				req.session.cred = req.user; //set session
-				res.redirect("/");
+				res.redirect("/apps");
 			} else {
 				// don`t set session
 				console.log("failed");
@@ -128,6 +128,26 @@ app.post('/login', checkAuth, function(req, res, next) {
 		});
 	}
 });
+
+// Login
+app.get('/register', checkAuth, function(req, res) {
+	// check whether user is logged in ?
+	// then log him out
+	if(process.env["debug"]){
+		console.log(req.query);
+		console.log(req.params);
+		console.log(req.body);
+	}
+	res.render('register', {
+		title: 'Register | Nodester Admin Panel',
+		layout : 'bootstrap',
+		is_logged: req.is_logged,
+		action: req.query.action
+	});
+ 
+});
+
+
 
 // Need to write paths to all ndoester APIs
 // including GET and POST - done
@@ -149,6 +169,13 @@ app.all("/api/*", checkAuth, function(req, res, next) {
 		res.header('Content-Type', 'application/json');
 		// method, api path, data, credentials, callback
 		nodester.request(req.method, req.params[0], params, req.user.creds, function(response) {
+			res.send(response);
+		});
+	} else if(req.method==='POST' &&  req.params[0]==='user'){
+		params = req.body;
+		res.header('Content-Type', 'application/json');
+		// method, api path, data, credentials, callback
+		nodester.request(req.method, req.params[0], params, null, function(response) {
 			res.send(response);
 		});
 	} else {

@@ -1,0 +1,44 @@
+
+form.form-horizontal(method="post",action="/register", id="register-user")
+	fieldset
+		legend Register for a Nodester account
+		#userform-message.hidden
+			a.close(href="#", data-dismiss="alert") x 
+			h4.alert-headings Please correct your details and try again
+			p
+		.control-group
+			label.control-label(for="username") Username
+			.controls
+				input(type="text", id="username", placeholder="User Name here...", class="input-xlarge")
+		.control-group
+			label.control-label(for="email") Email Address
+			.controls
+				input(type="text", id="email",  placeholder="Email Address here...", class="input-xlarge")
+		.control-group
+			label.control-label(for="password") Password
+			.controls
+				input(type="password", id="password", placeholder="Password here...", class="input-xlarge")
+		.control-group
+			label.control-label(for="") Confirm Password
+			.controls
+				input(type="password", id="confirmPassword",  placeholder="Conform password here...", class="input-xlarge")
+		.control-group
+			label.control-label(for="coupon") Nodester Coupon
+			.controls
+				input(type="text", id="coupon",  placeholder="Nodester coupon here...", class="input-xlarge")
+		.control-group
+			label.control-label(for="rsakey") RSA Key
+			.controls
+				textarea#rsakey.xxlarge(rows="4")
+				p.help-block Mac and Linux users can copy and paste their RSA Keys by running "cat ~/.ssh/id_rsa.pub | pbcopy" from the command line.
+		.form-actions
+			button.btn.btn-primary(type="submit") Register
+			&nbsp;
+			button.btn Cancel
+script
+	$(function(){
+		$('#failed').fadeIn();
+		$('#incomplete').fadeIn();
+		$('input[type="text"]').focus();
+	});
+script(src="/static/javascripts/registration.js")

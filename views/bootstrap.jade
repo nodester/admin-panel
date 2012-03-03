@@ -1,0 +1,67 @@
+!!! 5
+html
+	head
+		title= title
+		meta(charset='UTF-8')
+		meta(http-equiv='Content-Type', content='text/html;charset=utf-8')
+		meta(http-equiv='X-UA-Compatible', content='IE=Edge,chrome=1')
+		link(rel='icon', href='/static/i/favicon.ico')
+		link(rel='shortcut icon', href='/static/i/favicon.ico')
+		link(rel='stylesheet', href='/static/stylesheets/bootstrap.css')
+		style
+			body {
+				padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+			}
+			.hidden {
+				display:none;
+			}
+		script(src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js")
+		// if lt IE 9
+			script(src='/static/js/lib/html5.js')
+
+	body
+	.navbar.navbar-fixed-top
+		.navbar-inner
+			.container
+				a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+					span.icon-bar
+					span.icon-bar
+					span.icon-bar
+				a.brand(href='http://nodester.com') 
+					img(src="/static/i/rocket-logo-extra-small.png", alt="nodester rocket") 
+					span &nbsp;nodester
+				.nav-collapse
+					ul.nav
+						li.active
+							a(href='http://nodester.com') Home
+						li
+							a(href='http://nodester.com/api.html') API
+						li
+							a(href='http://nodester.com/help.html') Help
+						li
+							a(href="http://irc.nodester.com/") IRC
+						li
+							a(href="http://blog.nodester.com") Blog
+						li
+							a(href="/login") Login
+				//
+					/.nav-collapse 
+	.container 
+		!= body
+	//
+		/container
+	script(src="/static/javascripts/lib/underscore-min.js")
+	script(src="/static/javascripts/lib/backbone-min.js")
+	script(src="/static/javascripts/lib/mustache.min.js")
+	script(src="/static/javascripts/lib/bootstrap.min.js")
+	// script(src="/static/javascripts/n.js")
+	script
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-23005703-1']);
+		_gaq.push(['_trackPageview']);
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	include frontend-templates
