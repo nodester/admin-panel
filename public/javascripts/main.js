@@ -27,6 +27,16 @@ var Apps = Backbone.Collection.extend({
 	url: '/api/apps'
 });
 
+var Domain = Backbone.Model.extend({
+	idAttribute: 'domain',
+	url: function(){return '/api/appdomains/' + this.appname}
+});
+
+var Domains = Backbone.Collection.extend({
+	model: Domain,
+	url: '/api/appdomains'
+})
+
 var apps = new Apps;
 
 
@@ -38,7 +48,7 @@ var apps = new Apps;
 var Router = Backbone.Router.extend({
 	initialize: function() {
 		panel.appListView = {};
-		panel.domainListView = new DomainListView();
+		panel.domainListView = {}
 		//panel.appListView.render();
 	},
 
@@ -54,7 +64,9 @@ var Router = Backbone.Router.extend({
 	},
 
 	domains: function() {
-
+		var domains = new Domains();
+		panel.domainListView = new DomainListView({collection: domains});
+		panel.domainListView.render();
 	},
 
 	login: function(){
@@ -72,7 +84,8 @@ var AppView = Backbone.View.extend({
 	events: {
 		'click .start': 'startApp',
 		'click .stop': 'stopApp',
-		'click .applogs': 'showLogs'
+		'click .applogs': 'showLogs',
+		'click .app_info' : 'showInfo'
 	},
 
 	initialize: function() {
@@ -107,7 +120,19 @@ var AppView = Backbone.View.extend({
 				content: html
 			});
 		});
-
+	},
+	showInfo: function(e) {
+		e.preventDefault();
+		console.log('showIfno')
+		var appname= this.model.id;
+		$.get('/api/apps/' + this.model.id, function(res) {
+			res.appname = appname
+			var infoTmpl = $('#app-info-tmpl').html();
+			var html = Mustache.to_html(infoTmpl, res);
+			$('#modal').modal({
+				content: html
+			});
+		});
 	}
 });
 
@@ -131,13 +156,77 @@ var AppListView = Backbone.View.extend({
 	}
 });
 
+var DomainView = Backbone.View.extend({
+	tagName: 'tr',
+	initialize: function() {
+		this.tmpl = $('#domain-tmpl').html();
+		this.model.on('sync', this.render, this);
+	},
+
+	render: function() {
+		var html = Mustache.to_html(this.tmpl, this.model.toJSON());
+		this.$el.html(html);
+		return this;
+	},
+	events: {
+		"click .delete" : "deleteDomain"
+	},
+	deleteDomain : function(e){
+		e.preventDefault();
+		this.destroy();
+	}
+});
 var DomainListView = Backbone.View.extend({
+	initialize: function() {
+		this.tmpl = $('#domain-list-tmpl').html();
+		this.collection.fetch();
+		this.collection.on('reset', this.render, this);
+	},
+
+	render: function() {
+		//var html = Mustache.to_html(this.tmpl, this.collection.toJSON());
+		//this.$el.html(html);
+		
+		var html = Mustache.to_html(this.tmpl);
+		$('.tree').html(html).fadeIn('fast');
+		this.collection.each(function(domain) {
+			console.log(domain);
+			var view = new DomainView({model: domain});
+			$('.tree tbody').append(view.render().el);
+		});
+		
+		return this;
+	}
 });
 
 
 $(function() {
 	new Router;
 	Backbone.history.start({pushState: true});
+	
+	//HACK Until I wire it into the backbone view
+	$(".swap > span").live("click", function(e){
+
+		$(this).hide().next().show().focus();
+
+	});
+	$(".swap > input").live("change", function(e){
+		var $input = $(this),
+			val = $input.val(),
+			data = $input.data('params');
+			appname= data.appname,
+			data.start = val; 
+		$.ajax({
+			url: "/api/apps/" + appname,
+			type: "PUT",
+			data: {"start": data.start, "appname": appname, "name": appname},
+			success: function(r) {
+				alert('You will need to restart server for change');
+			}
+		})
+		$(this).hide().prev().html(val).show();
+
+	});
 });
 
 })();

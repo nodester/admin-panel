@@ -4,6 +4,7 @@ script(id="app-list-tmpl", type="text/html")
 		th port
 		th app-status
 		th action
+		
 
 script(id="app-tmpl", type="text/html")
 	td.name {{name}}
@@ -23,3 +24,46 @@ script(id="log-tmpl", type="text/html")
 	pre
 		{{.}}
 	{{/lines}}
+
+script(id="app-info-tmpl", type="text/html")
+	h2 About 
+		strong {{appname}}
+	table.table(cellpadding="0", cellspacing="0")
+		tr
+			td.label port
+			td {{port}}
+		tr
+			td.label gitrepo
+			td {{gitrepo}}
+		tr
+			td.label start file
+			td.swap
+				span start file {{start}}
+				input(type="text", data-params='{"appname":"{{appname}}"}', value="{{start}}")
+		tr
+			td.label app status
+			td {{running}}
+		tr
+			td.label process id
+			td {{pid}}
+	p
+		a.submit.r5.redgrad.no_u(href="/app/{{appname}}", data-params="{'appname':'{{appname}}'}") Destroy App
+
+script(id="domain-list-tmpl", type="text/html")
+	thead
+		tr
+			th domain
+			th appname
+			th port
+			th actions
+	tbody
+	tfoot
+		tr
+			td(colspan="4")
+				a.add(href="#") Add
+script(id="domain-tmpl", type="text/html")
+	td {{domain}}
+	td {{appname}}
+	td {{port}}
+	td.actions
+		a.delete(href="/appdomains/{{appname}}/{{domain}}") delete
