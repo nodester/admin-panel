@@ -114,6 +114,7 @@ var AppView = Backbone.View.extend({
 	showLogs: function(e) {
 		e.preventDefault();
 		$.get('/api/applogs/' + this.model.id, function(res) {
+			//TODO Check if no info in logs and display message
 			var logTmpl = $('#log-tmpl').html();
 			var html = Mustache.to_html(logTmpl, {lines: res.lines});
 			$('#modal').modal({
@@ -122,8 +123,7 @@ var AppView = Backbone.View.extend({
 		});
 	},
 	showInfo: function(e) {
-		e.preventDefault();
-		console.log('showIfno')
+		e.preventDefault(); 
 		var appname= this.model.id;
 		$.get('/api/apps/' + this.model.id, function(res) {
 			res.appname = appname
@@ -147,11 +147,9 @@ var AppListView = Backbone.View.extend({
 		var html = Mustache.to_html(this.tmpl);
 		$('.tree').html(html).fadeIn('fast');
 		this.collection.each(function(app) {
-			console.log(app);
 			var view = new AppView({model: app});
 			$('.tree tbody').append(view.render().el);
 		});
-		console.log('rendered!');
 		return this;
 	}
 });
@@ -190,7 +188,6 @@ var DomainListView = Backbone.View.extend({
 		var html = Mustache.to_html(this.tmpl);
 		$('.tree').html(html).fadeIn('fast');
 		this.collection.each(function(domain) {
-			console.log(domain);
 			var view = new DomainView({model: domain});
 			$('.tree tbody').append(view.render().el);
 		});
@@ -222,6 +219,7 @@ $(function() {
 			data: {"start": data.start, "appname": appname, "name": appname},
 			success: function(r) {
 				alert('You will need to restart server for change');
+				//TODO Sync the collection
 			}
 		})
 		$(this).hide().prev().html(val).show();
