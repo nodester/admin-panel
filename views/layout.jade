@@ -15,34 +15,33 @@ html
   body
       header
         h1 Nodester Admin Panel
-      - if(is_logged)
-        p.log_info
-          | Howdy <strong>#{user}</strong> !
-          a(href="/logout") Logout
-      #content_wrapper
+      .main
         - if(is_logged)
-          .sidebar.fl
-            != partial("nav")
-        .content
-          != body
-        .cl
-      footer
-        p <strong>NOTE</strong> <br />
-          | This project is work in progress. <br />
-          | Kindly file issues/pull requests at
-          a(href='http://github.com/nodester/admin-panel', target="_blank") http://github.com/nodester/admin-panel
-        p Special thanks to the creators of
-          a(target="_blank", href='http://nodester.com') Nodester.com
-          |  for this brilliant platform :)
+          != partial("nav")
+          p.log_info
+            | Howdy <strong>#{user}</strong> !
+            a(href="/logout") Logout
+        #content_wrapper
+          .content
+            != body
+          .cl
+        footer
+          p <strong>NOTE</strong> <br />
+            | This project is work in progress. <br />
+            | Kindly file issues/pull requests at
+            a(href='http://github.com/nodester/admin-panel', target="_blank") http://github.com/nodester/admin-panel
+          p Special thanks to the creators of
+            a(target="_blank", href='http://nodester.com') Nodester.com
+            |  for this brilliant platform :)
 
-        p - by 
-          | <a href="http://twitter.com/michealbenedict" target="_blank">@michealbenedict</a>, 
-          | <a href="http://twitter.com/crp_underground" target="_blank">@crp_underground</a> and 
-          | <a href="http://twitter.com/kev_nz" target="_blank">@kev_nz</a> 
-          | for <a href="http://twitter.com/nodester" target="_blank">@nodester</a>
-      #modal.modal
-        .close &times;
-        #modal_content
+          p - by 
+            | <a href="http://twitter.com/michealbenedict" target="_blank">@michealbenedict</a>, 
+            | <a href="http://twitter.com/crp_underground" target="_blank">@crp_underground</a> and 
+            | <a href="http://twitter.com/kev_nz" target="_blank">@kev_nz</a> 
+            | for <a href="http://twitter.com/nodester" target="_blank">@nodester</a>
+        #modal.modal
+          .close &times;
+          #modal_content
 
   script(src="/static/javascripts/lib/jq.modal.js")
   script(src="/static/javascripts/lib/underscore-min.js")
