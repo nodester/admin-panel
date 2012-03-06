@@ -166,7 +166,7 @@ var AppListView = Backbone.View.extend({
 
 	render: function() {
 		var html = Mustache.to_html(this.tmpl);
-		$('.tree').html(html).fadeIn('fast');
+		$('.content').html(html).fadeIn('fast');
 		this.collection.each(function(app) {
 			var view = new AppView({model: app});
 			$('.tree tbody').append(view.render().el);
@@ -207,7 +207,7 @@ var DomainListView = Backbone.View.extend({
 		//this.$el.html(html);
 		
 		var html = Mustache.to_html(this.tmpl);
-		$('.tree').html(html).fadeIn('fast');
+		$('.content').html(html).fadeIn('fast');
 		this.collection.each(function(domain) {
 			var view = new DomainView({model: domain});
 			$('.tree tbody').append(view.render().el);

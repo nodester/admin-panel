@@ -1,10 +1,11 @@
 script(id="app-list-tmpl", type="text/html")
-	tr
-		th name
-		th port
-		th app-status
-		th action
-		
+	table.tree
+		tr
+			th name
+			th port
+			th app-status
+			th action
+	button.btn.btn-primary <i class="icon-plus icon-white"></i> Create a new app
 
 script(id="app-tmpl", type="text/html")
 	td.name {{name}}
@@ -47,17 +48,19 @@ script(id="app-info-tmpl", type="text/html")
 		a.submit.r5.redgrad.no_u(href="/app/{{appname}}", data-params="{'appname':'{{appname}}'}") Destroy App
 
 script(id="domain-list-tmpl", type="text/html")
-	thead
-		tr
-			th domain
-			th appname
-			th port
-			th actions
-	tbody
-	tfoot
-		tr
-			td(colspan="4")
-				a.add(href="#") Add
+	table.tree
+		thead
+			tr
+				th domain
+				th appname
+				th port
+				th actions
+		tbody
+		tfoot
+			tr
+				td(colspan="4")
+					a.add(href="#") Add
+
 script(id="domain-tmpl", type="text/html")
 	td {{domain}}
 	td {{appname}}

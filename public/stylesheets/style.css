@@ -1,6 +1,6 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  color:#4b4b4b;
+  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+  /*color: #4b4b4b;*/
 }
 
 h1, h2, h3 { line-height:1.2em; }
@@ -15,12 +15,9 @@ p { line-height:1.2em; padding:0.5em 0; }
   min-height: 300px;
 }
 
-ul.snav {
-  display:none;
-}
-
-ul.snav > li {
-  padding:5px 0;
+.content {
+  width: 75%;
+  margin: 0 auto;
 }
 
 .login_wrap {
@@ -129,8 +126,7 @@ p#incomplete {
   width:99%;
 }
 .tree {
-  width: 75%;
-  margin: 0 auto;
+  width: 100%;
 }
 .tree th,
 .table th {
