@@ -1,8 +1,8 @@
-ul.lnav
-  li.first
-    a(href="/apps",rel="main",id="my_apps") My Apps
+ul.nav.nav-tabs
+  li.active
+    a#my_apps(href="/apps", rel="main") My Apps
     ul.snav
       li
-        a(href="/app/create",rel="modal",class="app_create") Create New App
+        a.app_create(href="/app/create", rel="modal") Create New App
   li
-    a(href="/domains",rel="main") My Domains
+    a(href="/domains", rel="main") My Domains
