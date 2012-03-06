@@ -15,44 +15,12 @@ p { line-height:1.2em; padding:0.5em 0; }
   min-height: 300px;
 }
 
-ul.lnav {
-  padding:0;
-  list-style:none;
-  width:150px;
-  font-size:12px;
-}
-
 ul.snav {
   display:none;
 }
 
 ul.snav > li {
   padding:5px 0;
-}
-
-ul.lnav > li.first {
-  margin:0;
-}
-
-ul.lnav > li {
-  margin-top:2px;
-}
-
-ul.lnav > li > a {
-  display:block;
-  background:#ddd;
-  padding:0.5em 1em;
-  color:#555;
-  text-decoration:none;
-}
-
-ul.lnav > li > a:hover,
-ul.lnav > li.active > a {
-  background:#bbb;
-}
-
-ul.lnav > li.active ul.snav {
-  display:block;
 }
 
 .login_wrap {
@@ -160,7 +128,10 @@ p#incomplete {
   margin-bottom: 1em;
   width:99%;
 }
-.tree{width:75%;}
+.tree {
+  width: 75%;
+  margin: 0 auto;
+}
 .tree th,
 .table th {
   font-weight: normal;
@@ -179,7 +150,7 @@ p#incomplete {
 }
 
 .tree .actions a {
-  margin-right: 8px;
+  margin-right: 20px;
 }
 
 header {

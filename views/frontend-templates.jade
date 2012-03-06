@@ -12,11 +12,8 @@ script(id="app-tmpl", type="text/html")
 	td.status {{running}}
 	td.actions
 		a.start(href="/app") start
-		&nbsp;
 		a.stop(href="/app") stop
-		&nbsp;
 		a.applogs(href="/applogs/{{name}}") logs
-		&nbsp;
 		a.app_info(href="/app/{{name}}") info
 
 script(id="log-tmpl", type="text/html")
