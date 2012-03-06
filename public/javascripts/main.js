@@ -41,9 +41,6 @@
 	// and its utility seems minimal. Later.
 	var Router = Backbone.Router.extend({
 		initialize: function() {
-			panel.appListView = {};
-			panel.domainListView = {};
-			panel.appDetailView = {};
 			panel.navView = new NavView(); 
 		},
 
@@ -64,8 +61,10 @@
 		appDetail:function(appname){
 			panel.appDetailView = new AppDetailView({model: new App({name:appname})});
 		},
-		domains: function() {
+		domains: function() { 
 			var domains = new Domains();
+			console.log(this);
+			console.log('^^^ router');
 			panel.domainListView = new DomainListView({collection: domains});
 			panel.domainListView.render();
 		},
@@ -198,13 +197,17 @@
 		},
 
 		render: function() {
+			
+			//this feels very wrong
+			if(window.location.pathname !== '/apps'){
+				return this;
+			}
 			var html = Mustache.to_html(this.tmpl);
 			$('.content').html(html).fadeIn('fast');
 			this.collection.each(function(app) {
 				var view = new AppView({model: app});
 				$('.tree tbody').append(view.render().el);
-			});
-			this.delegateEvents(this.events);
+			}); 
 			return this;
 		},
 		events: {
