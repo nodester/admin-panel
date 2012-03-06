@@ -3,39 +3,17 @@ body {
   color:#4b4b4b;
 }
 
-h1,h2,h3 {
-  line-height:1.2em;
-}
+h1, h2, h3 { line-height:1.2em; }
+ul, ol { padding-left:2em; }
+p { line-height:1.2em; padding:0.5em 0; }
 
-ul,ol {
-  padding-left:2em;
-}
+.fr { float: right; }
+.oh { overflow: hidden; }
+.cl {clear: both; }
 
-p {
-  line-height:1.2em;
-  padding:0.5em 0;
-}
-
-*:focus {outline: none;}
-
-a {
-  color: #1d64a0;
-}
-
-.fr {
-	float:right;
-}
-
-.oh {
-	overflow:hidden;
-}
-
-.cl {
-	clear:both;
-}
 #content_wrapper {
-  padding-top:1.4em;
-  min-height:300px;
+  padding-top: 1.4em;
+  min-height: 300px;
 }
 
 ul.lnav {
