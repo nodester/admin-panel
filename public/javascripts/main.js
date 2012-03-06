@@ -92,6 +92,9 @@ var NavView = Backbone.View.extend({
 		e.preventDefault();
 		var href = $(e.currentTarget).attr('href');
 		panel.router.navigate(href.substr(1), {trigger: true});
+		// Switch active tab display
+		this.$('li').removeClass('active');
+		$(e.currentTarget).parent().addClass('active');
 	}
 
 });
