@@ -29,13 +29,13 @@ var Apps = Backbone.Collection.extend({
 
 var Domain = Backbone.Model.extend({
 	idAttribute: 'domain',
-	url: function(){return '/api/appdomains/' + this.appname}
+	url: function() { return '/api/appdomains/' + this.appname }
 });
 
 var Domains = Backbone.Collection.extend({
 	model: Domain,
 	url: '/api/appdomains'
-})
+});
 
 var apps = new Apps;
 
@@ -46,6 +46,10 @@ var apps = new Apps;
 // Meh, not sure how to handle this yet,
 // and its utility seems minimal. Later.
 var Router = Backbone.Router.extend({
+	initialize: function() {
+		panel.navView = new NavView;
+	},
+
 	routes: {
 		'apps': 'apps',
 		'domains': 'domains',
@@ -77,6 +81,21 @@ var Router = Backbone.Router.extend({
 
 // Views
 // -----
+
+var NavView = Backbone.View.extend({
+	el: '.nav',
+	events: {
+		'click li a': 'navigate'
+	},
+
+	navigate: function(e) {
+		e.preventDefault();
+		var href = $(e.currentTarget).attr('href');
+		panel.router.navigate(href.substr(1), {trigger: true});
+	}
+
+});
+
 var AppView = Backbone.View.extend({
 	tagName: 'tr',
 
@@ -197,7 +216,7 @@ var DomainListView = Backbone.View.extend({
 
 
 $(function() {
-	new Router;
+	panel.router = new Router;
 	Backbone.history.start({pushState: true});
 	
 	//HACK Until I wire it into the backbone view
