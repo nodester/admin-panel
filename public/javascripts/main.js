@@ -11,8 +11,7 @@
 		
 		// The Nodester API exposes individual apps at /app, while the list of apps
 		// is at /apps
-		url: function() { 
-			console.log(this);
+		url: function() {  
 			return '/api/apps/' + this.get('name');
 		}
 	});
@@ -54,7 +53,6 @@
 		},
 
 		apps: function() {
-			console.log('apps called')
 			panel.appListView = new AppListView({collection: apps});
 			panel.appListView.render();
 		},
@@ -62,9 +60,7 @@
 			panel.appDetailView = new AppDetailView({model: new App({name:appname})});
 		},
 		domains: function() { 
-			var domains = new Domains();
-			console.log(this);
-			console.log('^^^ router');
+			var domains = new Domains(); 
 			panel.domainListView = new DomainListView({collection: domains});
 			panel.domainListView.render();
 		},
@@ -197,17 +193,15 @@
 		},
 
 		render: function() {
-			
-			//this feels very wrong
-			if(window.location.pathname !== '/apps'){
-				return this;
+			//this feels very wrong 
+			if(window.location.pathname === '/apps' || window.location.pathname ==='/'){
+				var html = Mustache.to_html(this.tmpl);
+				$('.content').html(html).fadeIn('fast');
+				this.collection.each(function(app) {
+					var view = new AppView({model: app});
+					$('.tree tbody').append(view.render().el);
+				});
 			}
-			var html = Mustache.to_html(this.tmpl);
-			$('.content').html(html).fadeIn('fast');
-			this.collection.each(function(app) {
-				var view = new AppView({model: app});
-				$('.tree tbody').append(view.render().el);
-			}); 
 			return this;
 		},
 		events: {
@@ -271,8 +265,9 @@
 		},
 
 		render: function() {
-			//var html = Mustache.to_html(this.tmpl, this.collection.toJSON());
-			//this.$el.html(html);
+			if(window.location.pathname !== '/domains'){
+				return this;
+			}
 		
 			var html = Mustache.to_html(this.tmpl);
 			$('.content').html(html).fadeIn('fast');
@@ -335,8 +330,7 @@
 		$('#modal').on('hidden', function(){
 		 	history.back();
 		});
-		$('#loader').ajaxStart(function(){
-			console.log('test');
+		$('#loader').ajaxStart(function(){ 
 		   $(this).show();
 		 }).ajaxStop(function(){
 			$(this).hide();
