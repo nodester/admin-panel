@@ -1,10 +1,11 @@
 script(id="app-list-tmpl", type="text/html")
-	tr
-		th name
-		th port
-		th app-status
-		th action
-		
+	table.tree
+		tr
+			th name
+			th port
+			th app-status
+			th action
+	a#new-app.btn.btn-primary <i class="icon-plus icon-white"></i> Create a new app
 
 script(id="app-tmpl", type="text/html")
 	td.name {{name}}
@@ -12,11 +13,8 @@ script(id="app-tmpl", type="text/html")
 	td.status {{running}}
 	td.actions
 		a.start(href="/app") start
-		&nbsp;
 		a.stop(href="/app") stop
-		&nbsp;
 		a.applogs(href="/applogs/{{name}}") logs
-		&nbsp;
 		a.app_info(href="/app/{{name}}") info
 
 script(id="log-tmpl", type="text/html")
@@ -26,44 +24,84 @@ script(id="log-tmpl", type="text/html")
 	{{/lines}}
 
 script(id="app-info-tmpl", type="text/html")
-	h2 About 
-		strong {{name}}
-	table.table(cellpadding="0", cellspacing="0")
-		tr
-			td.label port
-			td {{port}}
-		tr
-			td.label gitrepo
-			td {{gitrepo}}
-		tr
-			td.label start file
-			td.swap
-				span start file {{start}}
-				input(type="text", data-params='{"appname":"{{name}}"}', value="{{start}}")
-		tr
-			td.label app status
-			td {{running}}
-		tr
-			td.label process id
-			td {{pid}}
-	p
-		a.submit.r5.redgrad.no_u(href="/app/{{name}}", data-params="{'appname':'{{name}}'}") Destroy App
+	.modal-header
+		a.close(data-dismiss="modal") x
+		h3 {{name}}
+	.modal-body
+	.modal-footer
+		table.table(cellpadding="0", cellspacing="0")
+			tr
+				td.label port
+				td {{port}}
+			tr
+				td.label gitrepo
+				td {{gitrepo}}
+			tr
+				td.label start file
+				td.swap
+					span start file {{start}}
+					input(type="text", data-params='{"appname":"{{name}}"}', value="{{start}}")
+			tr
+				td.label app status
+				td {{running}}
+			tr
+				td.label process id
+				td {{pid}}
+		p
+			a.submit.r5.redgrad.no_u(href="/app/{{name}}", data-params="{'appname':'{{name}}'}") Destroy App
+
+script(id="app-new-tmpl", type="text/html")
+	.modal-header
+		a.close(data-dismiss="modal") x
+		h3 Create a New App
+	.modal-body
+
+	form.form-horizontal
+		fieldset
+			.control-group
+				label.control-label(for="appname") App Name
+				.controls
+					input(type="text", id="newapp-name", placeholder="App Name", class="input-xlarge")
+			.control-group
+				label.control-label(for="start") Start File
+				.controls
+					input(type="text", id="newapp-start",  placeholder="Start File", class="input-xlarge")
+			.form-actions
+					a#create-app.btn.btn-primary(href="/apps") Create App
 
 script(id="domain-list-tmpl", type="text/html")
-	thead
-		tr
-			th domain
-			th appname
-			th port
-			th actions
-	tbody
-	tfoot
-		tr
-			td(colspan="4")
-				a.add(href="#") Add
+	table.tree
+		thead
+			tr
+				th domain
+				th appname
+				th port
+				th actions
+		tbody
+	a#new-domain.btn.btn-primary <i class="icon-plus icon-white"></i> Add a new domain
+
 script(id="domain-tmpl", type="text/html")
 	td {{domain}}
 	td {{appname}}
 	td {{port}}
 	td.actions
-		a.delete(href="/appdomains/{{appname}}/{{domain}}") delete
+		a.delete(href="/api/appdomains/{{appname}}/{{domain}}") delete
+
+script(id="domain-new-tmpl", type="text/html")
+	.modal-header
+		a.close(data-dismiss="modal") x
+		h3 Add Domain
+	.modal-body
+
+	form.form-horizontal
+		fieldset
+			.control-group
+				label.control-label(for="newdomain-appname") App Name
+				.controls
+					input(type="text", id="newdomain-appname", placeholder="App Name", class="input-xlarge")
+			.control-group
+				label.control-label(for="newdomain-domain") Domain
+				.controls
+					input(type="text", id="newdomain-domain",  placeholder="Domain Name", class="input-xlarge")
+			.form-actions
+					a#create-domain.btn.btn-primary(href="/appdomains") Create Domain

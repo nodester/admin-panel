@@ -1,110 +1,23 @@
-/* Resets
------- */
-
-html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6,
-p, blockquote, pre, a, abbr, address, cite, code, del, dfn, em,
-img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, hr,
-dl, dt, dd, ol, ul, li, fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, figure, figcaption, hgroup,
-menu, footer, header, nav, section, summary, time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-article, aside, canvas, figure, figure img, figcaption, hgroup,
-footer, header, nav, section, audio, video {
-  display: block;
-}
-
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  color:#4b4b4b;
+  /*font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;*/
+  /*color: #4b4b4b;*/
 }
 
-h1,h2,h3 {
-  line-height:1.2em;
-}
+h1, h2, h3 { line-height:1.2em; }
+p { line-height:1.2em; padding:0.5em 0; }
 
-ul,ol {
-  padding-left:2em;
-}
+.fr { float: right; }
+.oh { overflow: hidden; }
+.cl {clear: both; }
 
-p {
-  line-height:1.2em;
-  padding:0.5em 0;
-}
-
-*:focus {outline: none;}
-
-a {
-  color: #1d64a0;
-}
-
-.fr {
-	float:right;
-}
-
-.fl {
-	float:left;
-}
-
-.oh {
-	overflow:hidden;
-}
-
-.cl {
-	clear:both;
-}
 #content_wrapper {
-  padding-top:1.4em;
-  min-height:300px;
+  padding-top: 1.4em;
+  min-height: 300px;
 }
 
-.sidebar {
-	margin: 0 30px;
-	width:200px;
-}
-
-ul.lnav {
-  padding:0;
-  list-style:none;
-  width:150px;
-  font-size:12px;
-}
-
-ul.snav {
-  display:none;
-}
-
-ul.snav > li {
-  padding:5px 0;
-}
-
-ul.lnav > li.first {
-  margin:0;
-}
-
-ul.lnav > li {
-  margin-top:2px;
-}
-
-ul.lnav > li > a {
-  display:block;
-  background:#ddd;
-  padding:0.5em 1em;
-  color:#555;
-  text-decoration:none;
-}
-
-ul.lnav > li > a:hover,
-ul.lnav > li.active > a {
-  background:#bbb;
-}
-
-ul.lnav > li.active ul.snav {
-  display:block;
+.content {
+  width: 75%;
+  margin: 0 auto;
 }
 
 .login_wrap {
@@ -212,7 +125,9 @@ p#incomplete {
   margin-bottom: 1em;
   width:99%;
 }
-.tree{width:75%;}
+.tree {
+  width: 100%;
+}
 .tree th,
 .table th {
   font-weight: normal;
@@ -231,23 +146,36 @@ p#incomplete {
 }
 
 .tree .actions a {
-  margin-right: 8px;
+  margin-right: 20px;
 }
 
-header{
+header {
 	padding: 30px 0;
 	text-align: center;
 	border-bottom: 1px solid #FFF;
-	box-shadow: 3px 7px 5px #DDD;
-    -webkit-box-shadow: 3px 7px 5px #DDD;
-    -moz-box-shadow: 3px 7px 5px #DDD;
-    -o-box-shadow: 3px 7px 5px #DDD;
-	background: #F2F2F2 url('/static/i/rocket-logo-small.png') 30px 15px no-repeat;
+
+  background: #f2f2f2;
+  background-image: url('/static/i/rocket-logo-small.png');
+  background-position: 30px 15px;
+  background-repeat: no-repeat;
+  background: url('/static/i/rocket-logo-small.png') no-repeat 30px 15px, 
+    -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#ddd));
+  background: url('/static/i/rocket-logo-small.png') no-repeat 30px 15px, 
+    -webkit-linear-gradient(top, #f2f2f2, #ddd);
+  background: url('/static/i/rocket-logo-small.png') no-repeat 30px 15px, 
+    -moz-linear-gradient(top, #f2f2f2, #ddd);
+  background: url('/static/i/rocket-logo-small.png') no-repeat 30px 15px, 
+    -ms-linear-gradient(top, #f2f2f2, #ddd);
+  background: url('/static/i/rocket-logo-small.png') no-repeat 30px 15px, 
+    -o-linear-gradient(top, #f2f2f2, #ddd);
+  background: url('/static/i/rocket-logo-small.png') no-repeat 30px 15px, 
+    linear-gradient(to bottom, #f2f2f2, #ddd);
 }
+
 header h1 {
 	font-size: 2.8em;
-	text-shadow: 1px 1px 1px #FFF;
-	color: #000;
+	text-shadow: 2px 2px 2px #fff;
+	color: black;
 }
 
 footer {
@@ -261,54 +189,12 @@ footer p {
   line-height:1.4em;
 }
 
-/**** MODAL ****/
-.modal {
-  visibility: hidden;
-  top: 100px!important;
-  left: 50%;
-  margin-left:-260px;
-  position: fixed;
-  z-index: 1002;
-  width: 520px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  -moz-box-shadow: 0 0 10px rgba(0, 0, 0, .4);
-  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .4);
-  -box-shadow: 0 0 10px rgba(0, 0, 0, .4);
-  background:#fff;
-  min-height:200px;
+.main {
+  margin-top: 15px;
 }
 
-.modal .close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
-  z-index: 1003;
-  display: inline-block;
-}
-
-.modal-bg {
-  background: rgba(0,0,0,0.5);
-  width:100%;
-  height:100%;
-  position:absolute;
-  z-index:1001;
-  top:0;
-  left:0;
-}
-
-#modal_content {
-  padding:20px;
-}
-
-#modal_content h2 {
-  font-weight:200;
-}
-
-#modal_content h2 strong {
-  font-weight:700;
+.nav {
+  padding: 0 20px;
 }
 
 .table {
