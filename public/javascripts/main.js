@@ -46,12 +46,6 @@ var apps = new Apps;
 // Meh, not sure how to handle this yet,
 // and its utility seems minimal. Later.
 var Router = Backbone.Router.extend({
-	initialize: function() {
-		panel.appListView = {};
-		panel.domainListView = {}
-		//panel.appListView.render();
-	},
-
 	routes: {
 		'apps': 'apps',
 		'domains': 'domains',
