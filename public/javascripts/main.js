@@ -136,7 +136,7 @@
 
 		showLogs: function(e) {
 			e.preventDefault();
-			$.get('/api/applogs/' + this.model.id, function(res) {
+			$.get('/api/applogs/' + this.model.get('name'), function(res) {
 				//TODO Check if no info in logs and display message
 				if(res.status && res.status === 'failure'){
 					$('#modal').modal({
@@ -152,7 +152,7 @@
 		},
 		showInfo: function(e) {
 			e.preventDefault(); 
-			var appname= this.model.id; 
+			var appname= this.model.get('name'); 
 		
 			panel.router.navigate('apps/'+appname , {trigger: true });
 			
@@ -332,6 +332,13 @@
 		$('#modal').on('hidden', function(){
 		 	history.back();
 		});
+		$('#loader').ajaxStart(function(){
+			console.log('test');
+		   $(this).show();
+		 }).ajaxStop(function(){
+			$(this).hide();
+		})
+		;
 	});
 
 })();

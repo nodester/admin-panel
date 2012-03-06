@@ -225,3 +225,9 @@ footer p {
 	display:inline-block;
 	min-width:120px;
 }
+#loader {
+	min-width:20px;
+	min-height:20px;
+	padding:4px;
+	background:url('../i/loader.gif') no-repeat 50% top;
+}
