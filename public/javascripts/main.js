@@ -49,7 +49,8 @@ var Router = Backbone.Router.extend({
 	routes: {
 		'apps': 'apps',
 		'domains': 'domains',
-		'login': 'login'
+		'login': 'login',
+		'*path': 'default'
 	},
 
 	apps: function() {
@@ -63,8 +64,12 @@ var Router = Backbone.Router.extend({
 		panel.domainListView.render();
 	},
 
-	login: function(){
+	login: function() {
 		
+	},
+
+	default: function() {
+		this.navigate('apps');
 	}
 
 });
