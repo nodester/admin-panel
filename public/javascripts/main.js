@@ -23,7 +23,7 @@
 	});
 
 	var Domain = Backbone.Model.extend({ 
-		url: function() { return '/api/appdomains/' + this.get('appname'); }
+		url: function() { return '/api/appdomains/'; }
 	});
 
 	var Domains = Backbone.Collection.extend({
@@ -289,11 +289,10 @@
 			var html = Mustache.to_html($('#domain-new-tmpl').html());
 			$('#modal').html(html);
 			$('#modal').modal('show');
+			panel.router.navigate('appdomains/new' , {trigger: true });
 		},
 		addDomain: function(e){
 			e.preventDefault();
-			panel.router.navigate('appdomains/new' , {trigger: true });
-
 			var appname = $('#newdomain-appname').val(),
 				domain = $('#newdomain-domain').val();
 			var newDomain = new Domain(); 
@@ -307,6 +306,7 @@
 	$(function() {
 		panel.router = new Router();
 		Backbone.history.start({pushState: true});
+		panel.router.navigate();
 		//HACK Until I wire it into the backbone view
 		$(".swap > span").live("click", function(e){
 			$(this).hide().next().show().focus();
