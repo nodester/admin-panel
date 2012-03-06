@@ -132,17 +132,15 @@
 		showLogs: function(e) {
 			e.preventDefault();
 			$.get('/api/applogs/' + this.model.get('name'), function(res) {
-				//TODO Check if no info in logs and display message
+				var lines;
 				if(res.status && res.status === 'failure'){
-					$('#modal').modal({
-						content: 'No Logs Available for this App'
-					});
-				} else{
+					res.lines = ['No logs found'];
+				}
 					var logTmpl = $('#log-tmpl').html();
 					var html = Mustache.to_html(logTmpl, {lines: res.lines});
 					$('#modal').html(html);
 					$('#modal').modal('show');
-			}
+				
 			});
 		},
 		showInfo: function(e) {
