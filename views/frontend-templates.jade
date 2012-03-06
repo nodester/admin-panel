@@ -27,7 +27,7 @@ script(id="log-tmpl", type="text/html")
 
 script(id="app-info-tmpl", type="text/html")
 	h2 About 
-		strong {{appname}}
+		strong {{name}}
 	table.table(cellpadding="0", cellspacing="0")
 		tr
 			td.label port
@@ -39,7 +39,7 @@ script(id="app-info-tmpl", type="text/html")
 			td.label start file
 			td.swap
 				span start file {{start}}
-				input(type="text", data-params='{"appname":"{{appname}}"}', value="{{start}}")
+				input(type="text", data-params='{"appname":"{{name}}"}', value="{{start}}")
 		tr
 			td.label app status
 			td {{running}}
@@ -47,7 +47,7 @@ script(id="app-info-tmpl", type="text/html")
 			td.label process id
 			td {{pid}}
 	p
-		a.submit.r5.redgrad.no_u(href="/app/{{appname}}", data-params="{'appname':'{{appname}}'}") Destroy App
+		a.submit.r5.redgrad.no_u(href="/app/{{name}}", data-params="{'appname':'{{name}}'}") Destroy App
 
 script(id="domain-list-tmpl", type="text/html")
 	thead

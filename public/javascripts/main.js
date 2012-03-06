@@ -19,7 +19,10 @@ var App = Backbone.Model.extend({
 	idAttribute: 'name',
 	// The Nodester API exposes individual apps at /app, while the list of apps
 	// is at /apps
-	url: function() { return '/api/app/' + this.id; }
+	url: function() { 
+		console.log(this);
+		return '/api/apps/' + this.get('name');
+	}
 });
 
 var Apps = Backbone.Collection.extend({
@@ -48,21 +51,25 @@ var apps = new Apps;
 var Router = Backbone.Router.extend({
 	initialize: function() {
 		panel.appListView = {};
-		panel.domainListView = {}
+		panel.domainListView = {};
+		panel.appDetailView = {};
 		//panel.appListView.render();
 	},
 
 	routes: {
 		'apps': 'apps',
 		'domains': 'domains',
-		'login': 'login'
+		'login': 'login',
+		'apps/:appname' :'appDetail'
 	},
 
 	apps: function() {
 		panel.appListView = new AppListView({collection: apps});
 		panel.appListView.render();
 	},
-
+	appDetail:function(appname){
+		panel.appDetailView = new AppDetailView({model: new App({name:appname})});
+	},
 	domains: function() {
 		var domains = new Domains();
 		panel.domainListView = new DomainListView({collection: domains});
@@ -85,7 +92,7 @@ var AppView = Backbone.View.extend({
 		'click .start': 'startApp',
 		'click .stop': 'stopApp',
 		'click .applogs': 'showLogs',
-		'click .app_info' : 'showInfo'
+		'click .app_info' : 'showInfo',
 	},
 
 	initialize: function() {
@@ -113,26 +120,57 @@ var AppView = Backbone.View.extend({
 
 	showLogs: function(e) {
 		e.preventDefault();
+		
 		$.get('/api/applogs/' + this.model.id, function(res) {
 			//TODO Check if no info in logs and display message
-			var logTmpl = $('#log-tmpl').html();
-			var html = Mustache.to_html(logTmpl, {lines: res.lines});
-			$('#modal').modal({
-				content: html
-			});
+			if(res.status && res.status === 'failure'){
+				$('#modal').modal({
+					content: 'No Logs Available for this App'
+				});
+			} else{
+				var logTmpl = $('#log-tmpl').html();
+				var html = Mustache.to_html(logTmpl, {lines: res.lines});
+				$('#modal').modal({
+					content: html
+				});
+		}
 		});
 	},
 	showInfo: function(e) {
 		e.preventDefault(); 
-		var appname= this.model.id;
-		$.get('/api/apps/' + this.model.id, function(res) {
-			res.appname = appname
+		var appname= this.model.id; 
+		
+		nodester.navigate('apps/'+appname , {trigger: true, replace: true});
+		
+		var details= new App({name:appname});
+		details.fetch();
+		details.on('change', function(){
 			var infoTmpl = $('#app-info-tmpl').html();
-			var html = Mustache.to_html(infoTmpl, res);
+			var html = Mustache.to_html(infoTmpl, this.toJSON());
 			$('#modal').modal({
 				content: html
 			});
 		});
+	} 
+});
+
+var AppDetailView = Backbone.View.extend({
+	initialize: function() {
+		this.tmpl = $('#app-info-tmpl').html();
+		this.model.on('sync', this.render, this);
+	},
+
+	render: function() {
+		var html = Mustache.to_html(this.tmpl, this.model.toJSON());
+		this.$el.html(html);
+		return this;
+	},
+	events: {
+		"click .delete" : "deleteApp"
+	},
+	deleteApp : function(e){
+		e.preventDefault();
+		this.destroy();
 	}
 });
 
@@ -198,14 +236,12 @@ var DomainListView = Backbone.View.extend({
 
 
 $(function() {
-	new Router;
+
+	window.nodester = new Router();
 	Backbone.history.start({pushState: true});
-	
 	//HACK Until I wire it into the backbone view
 	$(".swap > span").live("click", function(e){
-
 		$(this).hide().next().show().focus();
-
 	});
 	$(".swap > input").live("change", function(e){
 		var $input = $(this),
@@ -219,7 +255,7 @@ $(function() {
 			data: {"start": data.start, "appname": appname, "name": appname},
 			success: function(r) {
 				alert('You will need to restart server for change');
-				//TODO Sync the collection
+				panel.appListView.collection.fetch()
 			}
 		})
 		$(this).hide().prev().html(val).show();
