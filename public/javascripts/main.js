@@ -8,11 +8,31 @@
 
 	var App = Backbone.Model.extend({
 		// actions: start, stop, show logs, show info, destroy
+		initialize: function() {
+			var appStatus = this._parseRunning(this.get('running'));
+			this.set({up: appStatus[0], status: appStatus[1]});
+		},
 		
 		// The Nodester API exposes individual apps at /app, while the list of apps
 		// is at /apps
 		url: function() {  
 			return '/api/apps/' + this.get('name');
+		},
+
+		// Turn 'running' attribute into more human-friendly status
+		_parseRunning: function(running) {
+			switch(running) {
+				case 'true':
+					return [true, 'running'];
+					break;
+				case 'false':
+					return [false, 'stopped'];
+					break;
+				default:
+					var text = running.split('-').join(' ').split('_').join(' ');
+					return [false, text];
+					break;
+			}
 		}
 	});
 
@@ -133,7 +153,7 @@
 			e.preventDefault();
 			$.get('/api/applogs/' + this.model.get('name'), function(res) {
 				//TODO Check if no info in logs and display message
-				if(res.status && res.status === 'failure'){
+				if(res.status && res.status === 'failure') {
 					$('#modal').modal({
 						content: 'No Logs Available for this App'
 					});
@@ -149,11 +169,11 @@
 			e.preventDefault(); 
 			var appname= this.model.get('name'); 
 		
-			panel.router.navigate('apps/'+appname , {trigger: true });
+			panel.router.navigate('apps/' + appname , {trigger: true});
 			
 			var details= new App({name:appname});
 			details.fetch();
-			details.on('change', function(){
+			details.on('change', function() {
 				var infoTmpl = $('#app-info-tmpl').html();
 				var html = Mustache.to_html(infoTmpl, this.toJSON());
 				
@@ -305,7 +325,8 @@
 		panel.router = new Router();
 		Backbone.history.start({pushState: true});
 		panel.router.navigate();
-		//HACK Until I wire it into the backbone view
+
+		// HACK Until I wire it into the backbone view
 		$(".swap > span").live("click", function(e){
 			$(this).hide().next().show().focus();
 		});
