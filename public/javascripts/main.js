@@ -19,7 +19,9 @@
 		},
 		// Turn 'running' attribute into more human-friendly status
 		_parseRunning: function(running) {
-			console.log(running);
+			if(running === undefined){
+				running = 'Application failed to start';
+			}
 			switch(running) {
 				case 'true':
 				case true:
@@ -29,8 +31,6 @@
 				case false : 
 					return [false, 'stopped'];
 					break;
-				case undefined:
-					return [false, 'unknown'];
 				default:
 					var text = running.toString().split('-').join(' ').split('_').join(' ');
 					return [false, text];

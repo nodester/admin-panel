@@ -226,4 +226,8 @@ footer p {
 	min-height:20px;
 	padding:4px;
 	background:url('../i/loader.gif') no-repeat 50% top;
+	position: fixed;
+	top:180px;
+	left:50%;
+	z-index:5;
 }
