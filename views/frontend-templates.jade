@@ -3,14 +3,15 @@ script(id="app-list-tmpl", type="text/html")
 		tr
 			th name
 			th port
-			th app-status
+			th status
 			th action
 	a#new-app.btn.btn-primary <i class="icon-plus icon-white"></i> Create a new app
 
 script(id="app-tmpl", type="text/html")
 	td.name {{name}}
 	td.port {{port}}
-	td.status {{running}}
+	td.status <span class="label {{#up}}label-success{{/up}}
+												| {{^up}}label-important{{/up}}">{{status}}</span>
 	td.actions
 		a.start(href="/app") start
 		a.stop(href="/app") stop

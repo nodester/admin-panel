@@ -7,12 +7,35 @@
 	// --------------------
 
 	var App = Backbone.Model.extend({
-		// actions: start, stop, show logs, show info, destroy
+		initialize: function() {
+			var appStatus = this._parseRunning(this.get('running'));
+			this.set({up: appStatus[0], status: appStatus[1]});
+		},
 		
 		// The Nodester API exposes individual apps at /app, while the list of apps
 		// is at /apps
 		url: function() {  
 			return '/api/apps/' + this.get('name');
+		},
+		// Turn 'running' attribute into more human-friendly status
+		_parseRunning: function(running) {
+			console.log(running);
+			switch(running) {
+				case 'true':
+				case true:
+					return [true, 'running'];
+					break;
+				case 'false':
+				case false : 
+					return [false, 'stopped'];
+					break;
+				case undefined:
+					return [false, 'unknown'];
+				default:
+					var text = running.toString().split('-').join(' ').split('_').join(' ');
+					return [false, text];
+					break;
+			}
 		}
 	});
 

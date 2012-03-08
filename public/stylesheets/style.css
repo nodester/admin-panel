@@ -38,10 +38,6 @@ p { line-height:1.2em; padding:0.5em 0; }
   text-align:center;
 }
 
-span.label {
-  display:block;
-}
-
 .input {
   border:1px solid #ccc;
   font-size:18px;
@@ -119,8 +115,8 @@ p#incomplete {
   border-top: 1px solid #D8D8D8;
   border-left: 1px solid #D8D8D8;
   border-right: 1px solid #D8D8D8;
-  font-family: Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
-  font-size:12px;
+  /*font-family: Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;*/
+  /*font-size: 14px;*/
   margin: 0;
   margin-bottom: 1em;
   width:99%;
