@@ -1,5 +1,20 @@
 (function() {
 
+	var setObject = function(key, value) {
+	    localStorage.setItem(key, JSON.stringify(value));
+	}
+
+	var getObject = function(key) {
+	    return JSON.parse(localStorage.getItem(key));
+	}
+	var getAppNames = function(){
+		var names= [];
+		var apps = getObject('apps');
+		for (var i=0; i < apps.length; i++) {
+			names.push(apps[i].name);
+		};
+		return names;
+	}
 	// Global object
 	window.panel = {};
 
@@ -185,6 +200,7 @@
 	});
 
 	var AppDetailView = Backbone.View.extend({
+		el: '#modal',
 		initialize: function() {
 			this.tmpl = $('#app-info-tmpl').html();
 			this.model.on('sync', this.render, this);
@@ -200,7 +216,15 @@
 		},
 		deleteApp : function(e){
 			e.preventDefault();
-			this.destroy();
+			$.ajax({
+				url: $(e.currentTarget).attr('href'),
+				type: "DELETE",
+				success: function(r) {
+					alert('App Removed');
+					panel.appListView.collection.fetch();
+					$('#modal').modal('hide');
+				}
+			})
 		}
 	});
 
@@ -216,6 +240,7 @@
 		render: function() {
 			//this feels very wrong 
 			if(window.location.pathname === '/apps' || window.location.pathname ==='/'){
+				setObject('apps', this.collection.toJSON());
 				var html = Mustache.to_html(this.tmpl);
 				$('.content').html(html).fadeIn('fast');
 				this.collection.each(function(app) {
@@ -272,7 +297,8 @@
 				type: "DELETE",
 				success: function(r) {
 					alert('Domain Removed');
-					panel.domainListView.collection.fetch()
+					panel.domainListView.collection.fetch();
+					$('#modal').modal('hide');
 				}
 			})
 		}
@@ -308,6 +334,9 @@
 			var html = Mustache.to_html($('#domain-new-tmpl').html());
 			$('#modal').html(html);
 			$('#modal').modal('show');
+			
+			
+			$('#newdomain-appname').typeahead({source:getAppNames()})
 			panel.router.navigate('appdomains/new' , {trigger: true });
 		},
 		addDomain: function(e){

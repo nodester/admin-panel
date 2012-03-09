@@ -49,7 +49,7 @@ script(id="app-info-tmpl", type="text/html")
 				td.label process id
 				td {{pid}}
 		p
-			a.submit.r5.redgrad.no_u(href="/app/{{name}}", data-params="{'appname':'{{name}}'}") Destroy App
+			a.submit.delete.r5.redgrad.no_u(href="/api/apps/{{name}}", data-params="{'appname':'{{name}}'}") Destroy App
 
 script(id="app-new-tmpl", type="text/html")
 	.modal-header

@@ -230,4 +230,5 @@ footer p {
 	top:180px;
 	left:50%;
 	z-index:5;
+	display:none;
 }
