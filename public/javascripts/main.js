@@ -430,7 +430,10 @@
 		
 	});
 
-	$(function() {
+	$(function() { 
+		if(window.location.pathname==='/login'){
+			return;
+		}
 		panel.router = new Router();
 		Backbone.history.start({pushState: true});
 		
