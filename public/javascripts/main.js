@@ -434,9 +434,6 @@
 		panel.router = new Router();
 		Backbone.history.start({pushState: true});
 		
-		var env = new EnvVar();
-		env.set({appname:"knode", key :"key", value:"schwag"});
-		env.save();
 		panel.router.navigate();
 		//HACK Until I wire it into the backbone view
 		$(".swap > span").live("click", function(e){
