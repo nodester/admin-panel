@@ -4,11 +4,12 @@ script(id="app-list-tmpl", type="text/html")
 			th name
 			th port
 			th status
-			th action
+			th actions
 	a#new-app.btn.btn-primary <i class="icon-plus icon-white"></i> Create a new app
 
 script(id="app-tmpl", type="text/html")
-	td.name {{name}}
+	td.name 
+		a(href="http://{{name}}.nodester.com", target="_blank") {{name}}
 	td.port {{port}}
 	td.status <span class="label {{#up}}label-success{{/up}}
 												| {{^up}}label-important{{/up}}">{{status}}</span>
@@ -16,13 +17,19 @@ script(id="app-tmpl", type="text/html")
 		a.start(href="/app") start
 		a.stop(href="/app") stop
 		a.applogs(href="/applogs/{{name}}") logs
-		a.app_info(href="/app/{{name}}") info
+		a.app-info(href="/app/{{name}}") info
+		a.git-reset(href="/api/gitreset/{{name}}") git reset
+		a.env-vars(href="/api/env/{{name}}", data-params='{"appname":"{{name}}"}', ) environment variables
 
 script(id="log-tmpl", type="text/html")
-	{{#lines}}
-	pre
-		{{.}}
-	{{/lines}}
+	.modal-header
+		a.close(data-dismiss="modal") x
+		h3 {{name}}
+	.modal-body
+		{{#lines}}
+		pre
+			{{.}}
+		{{/lines}}
 
 script(id="app-info-tmpl", type="text/html")
 	.modal-header
@@ -106,3 +113,15 @@ script(id="domain-new-tmpl", type="text/html")
 					input(type="text", id="newdomain-domain",  placeholder="Domain Name", class="input-xlarge")
 			.form-actions
 					a#create-domain.btn.btn-primary(href="/appdomains") Create Domain
+
+script(id="envvar-list-tmpl", type="text/html")
+	.modal-header
+		a.close(data-dismiss="modal") x
+		h3 {{name}}
+	.modal-body
+		table.table(cellpadding="0", cellspacing="0")
+			{{#vars}}
+			tr
+				td.label {{key}}
+				td {{value}}
+			{{/vars}}

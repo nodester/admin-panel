@@ -232,3 +232,9 @@ footer p {
 	z-index:5;
 	display:none;
 }
+td.label:hover{
+	color:#484848;
+}
+.message-container{
+	display:none;
+}

@@ -1,20 +1,37 @@
 (function() {
-
+	//set underscore templates for mustache style
+	_.templateSettings = {
+	  interpolate : /\{\{(.+?)\}\}/g
+	};
 	var setObject = function(key, value) {
-	    localStorage.setItem(key, JSON.stringify(value));
-	}
-
-	var getObject = function(key) {
-	    return JSON.parse(localStorage.getItem(key));
-	}
-	var getAppNames = function(){
-		var names= [];
-		var apps = getObject('apps');
-		for (var i=0; i < apps.length; i++) {
-			names.push(apps[i].name);
+			localStorage.setItem(key, JSON.stringify(value));
+		},
+		getObject = function(key) {
+		    return JSON.parse(localStorage.getItem(key));
+		},
+		getAppNames = function(){
+			var names= [];
+			var apps = getObject('apps');
+			for (var i=0; i < apps.length; i++) {
+				names.push(apps[i].name);
+			};
+			return names;
+		},
+		hasDomain = function(appname){
+			var apps = getAppNames();
+			var results = _.filter(apps, function(app){ return app === appname; });
+			console.log(results);
+			return results.length > 0;
+			
+		},
+		flashMessage = function(message, type){
+			$('.message-container')
+				.addClass('alert alert-success')
+				.html('<a class="close" data-dismiss="alert">x</a>' + message)
+				.show();
+ 
 		};
-		return names;
-	}
+
 	// Global object
 	window.panel = {};
 
@@ -67,7 +84,24 @@
 		model: Domain,
 		url: '/api/appdomains'
 	});
+	 
+	var EnvVar = Backbone.Model.extend({
+		url: '/api/env',
+		sync  : function(method, model, options){
+			if(method==='update'){
+				model.url = 'api/env/' + model.get('appname')+'/' + model.get('key');
+			}else if(method ==='create'){
+				model.url ='/api/env/' ; 
+				options.method = 'PUT';
+				method = 'update';
 
+			}else if(method==='DELETE'){
+				model.url ='/api/env/' + model.get('appname') +'/' + model.get('key'); 
+			}
+			console.log(options);
+			return Backbone.sync(method, model, options);
+		}
+	});
 	var apps = new Apps();
 
 
@@ -86,6 +120,7 @@
 			'domains': 'domains',
 			'login': 'login',
 			'apps/:appname' :'appDetail',
+			'apps/:appname/envvars'  : 'envVars',
 			'*path': 'default'
  
 		},
@@ -102,7 +137,9 @@
 			panel.domainListView = new DomainListView({collection: domains});
 			panel.domainListView.render();
 		},
-
+		envVars: function(){
+			
+		},
 		login: function() {
 		
 		},
@@ -141,7 +178,9 @@
 			'click .start': 'startApp',
 			'click .stop': 'stopApp',
 			'click .applogs': 'showLogs',
-			'click .app_info' : 'showInfo',
+			'click .app-info' : 'showInfo',
+			'click .env-vars' : 'showEnvVars',
+			'click .git-reset' : 'gitReset'
 		},
 
 		initialize: function() {
@@ -169,13 +208,15 @@
 
 		showLogs: function(e) {
 			e.preventDefault();
+			
+			var appname= this.model.get('name');
 			$.get('/api/applogs/' + this.model.get('name'), function(res) {
 				var lines;
 				if(res.status && res.status === 'failure'){
 					res.lines = ['No logs found'];
 				}
 					var logTmpl = $('#log-tmpl').html();
-					var html = Mustache.to_html(logTmpl, {lines: res.lines});
+					var html = Mustache.to_html(logTmpl, {name: appname, lines: res.lines});
 					$('#modal').html(html);
 					$('#modal').modal('show');
 				
@@ -196,6 +237,37 @@
 				$('#modal').html(html);
 				$('#modal').modal('show'); 
 			}); 
+		},
+		showEnvVars: function(e){
+			e.preventDefault();
+			var appname= this.model.get('name');
+			
+			//skip the mvc for now, ajax get the env vars and the build
+			$.ajax({
+				url:$(e.currentTarget).attr('href'),
+				success: function(r){
+					var vars = [];
+					for (var key in r.message){
+						vars.push({key: key, value: r.message[key]});
+					};
+					console.log({vars: vars})
+					var envTmpl = $('#envvar-list-tmpl').html();
+						var html = Mustache.to_html(envTmpl, {name: appname , vars: vars});
+						$('#modal').html(html);
+						$('#modal').modal('show');
+				}
+			})
+		},
+		gitReset: function(e){
+			console.log('git reset');
+			e.preventDefault();
+			$.ajax({
+				url: $(e.currentTarget).attr('href'),
+				type: "DELETE",
+				success: function(r) {
+					flashMessage('The git repository and npm list has been reset');  
+				}
+			});
 		} 
 	});
 
@@ -216,18 +288,20 @@
 		},
 		deleteApp : function(e){
 			e.preventDefault();
-			$.ajax({
-				url: $(e.currentTarget).attr('href'),
-				type: "DELETE",
-				success: function(r) {
-					alert('App Removed');
-					panel.appListView.collection.fetch();
-					$('#modal').modal('hide');
-				}
-			})
+			if(!hasDomain($(e.currentTarget).data('params').appname)){
+				$.ajax({
+					url: $(e.currentTarget).attr('href'),
+					type: "DELETE",
+					success: function(r) {
+						flashMessage('App Removed');
+						panel.appListView.collection.fetch();
+						$('#modal').modal('hide');
+					}
+				});
+			}
 		}
 	});
-
+	
 	var AppListView = Backbone.View.extend({
 		el: 'body',
 		initialize: function() {
@@ -296,7 +370,7 @@
 				url: $(e.currentTarget).attr('href'),
 				type: "DELETE",
 				success: function(r) {
-					alert('Domain Removed');
+					flashMessage('Domain Removed');
 					panel.domainListView.collection.fetch();
 					$('#modal').modal('hide');
 				}
@@ -315,9 +389,10 @@
 			if(window.location.pathname !== '/domains'){
 				return this;
 			}
-		
+			setObject('domains', this.collection.toJSON());
 			var html = Mustache.to_html(this.tmpl);
 			$('.content').html(html).fadeIn('fast');
+			
 			this.collection.each(function(domain) {
 				var view = new DomainView({model: domain});
 				$('.tree tbody').append(view.render().el);
@@ -349,11 +424,19 @@
 			}});
 		}
 	});
-
+	
+	var EnvVarListView = Backbone.View.extend({
+		
+		
+	});
 
 	$(function() {
 		panel.router = new Router();
 		Backbone.history.start({pushState: true});
+		
+		var env = new EnvVar();
+		env.set({appname:"knode", key :"key", value:"schwag"});
+		env.save();
 		panel.router.navigate();
 		//HACK Until I wire it into the backbone view
 		$(".swap > span").live("click", function(e){
