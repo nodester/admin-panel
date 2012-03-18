@@ -237,4 +237,6 @@ td.label:hover{
 }
 .message-container{
 	display:none;
+	margin:0 auto;
+	width:75%;
 }

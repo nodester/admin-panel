@@ -26,9 +26,12 @@
 		},
 		flashMessage = function(message, type){
 			$('.message-container')
-				.addClass('alert alert-success')
+				.addClass('alert alert-success alert-block')
 				.html('<a class="close" data-dismiss="alert">x</a>' + message)
 				.show();
+			setTimeout(function(){
+				$('.message-container').hide(400);
+			}, 2000);
  
 		};
 
@@ -241,7 +244,7 @@
 		showEnvVars: function(e){
 			e.preventDefault();
 			var appname= this.model.get('name');
-			
+			panel.router.navigate('apps/'+appname +'/envvars' , {trigger: true });
 			//skip the mvc for now, ajax get the env vars and the build
 			$.ajax({
 				url:$(e.currentTarget).attr('href'),
@@ -437,12 +440,12 @@
 		panel.router = new Router();
 		Backbone.history.start({pushState: true});
 		
-		panel.router.navigate();
+		panel.router.navigate('/apps');
 		//HACK Until I wire it into the backbone view
 		$(".swap > span").live("click", function(e){
 			$(this).hide().next().show().focus();
 		});
-		$(".swap > input").live("change", function(e){
+		$(".swap.startfile > input").live("change", function(e){
 			var $input = $(this),
 				val = $input.val(),
 				data = $input.data('params');
@@ -458,6 +461,21 @@
 				}
 			})
 			$(this).hide().prev().html(val).show();
+
+		});
+		$(".swap.envvar > input").live("change", function(e){
+			var $input = $(this),
+				val = $input.val(),
+				data = $input.data('params');
+				appname= data.appname,
+				data.start = val; 
+				
+				var env = new EnvVar();
+				env.set({appname:appname, key : data.key, value:val});
+				env.save();
+				$(this).hide().prev().html(val).show();
+				$('#modal').modal('hide');
+				flashMessage('You will need to restart server for change.');
 
 		});
 		$('#modal').on('hidden', function(){

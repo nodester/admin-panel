@@ -1,5 +1,5 @@
 script(id="app-list-tmpl", type="text/html")
-	table.tree
+	table.tree.table
 		tr
 			th name
 			th port
@@ -46,7 +46,7 @@ script(id="app-info-tmpl", type="text/html")
 				td {{gitrepo}}
 			tr
 				td.label start file
-				td.swap
+				td.swap.startfile
 					span start file {{start}}
 					input(type="text", data-params='{"appname":"{{name}}"}', value="{{start}}")
 			tr
@@ -123,5 +123,7 @@ script(id="envvar-list-tmpl", type="text/html")
 			{{#vars}}
 			tr
 				td.label {{key}}
-				td {{value}}
+				td.swap.envvar 
+					span {{value}}
+					input(type="text", data-params='{"appname":"{{name}}", "key":"{{key}}"}', value="{{value}}")
 			{{/vars}}
