@@ -19,7 +19,7 @@ html
 				- if(is_logged)
 					!= partial("nav")
 					p.log_info
-						| Howdy <strong>#{user}</strong> !
+						| Howdy, <strong>#{user}</strong>!&nbsp;&nbsp;
 						a(href="/logout") Logout
 				#content_wrapper
 					.message-container.alert 
@@ -32,14 +32,15 @@ html
 						| This project is work in progress. <br />
 						| Kindly file issues/pull requests at
 						a(href='http://github.com/nodester/admin-panel', target="_blank") http://github.com/nodester/admin-panel
-					p Special thanks to the creators of
+					p Special thanks to the creators of 
 						a(target="_blank", href='http://nodester.com') Nodester.com
 						|	 for this brilliant platform :)
 
 					p - by 
 						| <a href="http://twitter.com/michealbenedict" target="_blank">@michealbenedict</a>, 
-						| <a href="http://twitter.com/crp_underground" target="_blank">@crp_underground</a> and 
-						| <a href="http://twitter.com/kev_nz" target="_blank">@kev_nz</a> 
+						| <a href="http://twitter.com/crp_underground" target="_blank">@crp_underground</a> 
+						| <a href="http://twitter.com/kev_nz" target="_blank">@kev_nz</a> and 
+						| <a href="http://twitter.com/akavlie" target="_blank">@akavlie</a> 
 						| for <a href="http://twitter.com/nodester" target="_blank">@nodester</a>
 				#modal.modal(style="display:none;")
 
