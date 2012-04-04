@@ -1,8 +1,9 @@
 (function() {
-	//set underscore templates for mustache style
+	// Set underscore templates to mustache style
 	_.templateSettings = {
 	  interpolate : /\{\{(.+?)\}\}/g
 	};
+
 	var setObject = function(key, value) {
 			localStorage.setItem(key, JSON.stringify(value));
 		},
@@ -42,17 +43,13 @@
 	// --------------------
 
 	var App = Backbone.Model.extend({
+		idAttribute: 'name',
+
 		initialize: function() {
 			var appStatus = this._parseRunning(this.get('running'));
 			this.set({up: appStatus[0], status: appStatus[1]});
 		},
 		
-		// The Nodester API exposes individual apps at /app, while the list of apps
-		// is at /apps
-		url: function() {  
-			return '/api/apps/' + this.get('name');
-		},
-		// Turn 'running' attribute into more human-friendly status
 		_parseRunning: function(running) {
 			if(running === undefined){
 				running = 'Application failed to start';
@@ -76,7 +73,14 @@
 
 	var Apps = Backbone.Collection.extend({
 		model: App,
-		url: '/api/apps'
+		url: '/api/apps',
+
+		getByName: function(name) {
+			return this.find(function(app) {
+				return app.get('name') === name;
+			});
+
+		}
 	});
 
 	var Domain = Backbone.Model.extend({ 
@@ -212,7 +216,7 @@
 		showLogs: function(e) {
 			e.preventDefault();
 			
-			var appname= this.model.get('name');
+			var appname = this.model.get('name');
 			$.get('/api/applogs/' + this.model.get('name'), function(res) {
 				var lines;
 				if(res.status && res.status === 'failure'){
@@ -225,22 +229,21 @@
 				
 			});
 		},
+		
 		showInfo: function(e) {
 			e.preventDefault(); 
-			var appname= this.model.get('name'); 
+			var appName = this.model.get('name'); 
 		
-			panel.router.navigate('apps/'+appname , {trigger: true });
+			panel.router.navigate('apps/' + appName, {trigger: true});
 			
-			var details= new App({name:appname});
-			details.fetch();
-			details.on('change', function(){
-				var infoTmpl = $('#app-info-tmpl').html();
-				var html = Mustache.to_html(infoTmpl, this.toJSON());
-				
-				$('#modal').html(html);
-				$('#modal').modal('show'); 
-			}); 
+			var app = apps.getByName(appName);
+			var infoTmpl = $('#app-info-tmpl').html();
+			var html = Mustache.to_html(infoTmpl, details.toJSON());
+			
+			$('#modal').html(html);
+			$('#modal').modal('show'); 
 		},
+
 		showEnvVars: function(e){
 			e.preventDefault();
 			var appname= this.model.get('name');
