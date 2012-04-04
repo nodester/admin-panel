@@ -229,7 +229,7 @@
 				
 			});
 		},
-		
+
 		showInfo: function(e) {
 			e.preventDefault(); 
 			var appName = this.model.get('name'); 
@@ -238,7 +238,7 @@
 			
 			var app = apps.getByName(appName);
 			var infoTmpl = $('#app-info-tmpl').html();
-			var html = Mustache.to_html(infoTmpl, details.toJSON());
+			var html = Mustache.to_html(infoTmpl, app.toJSON());
 			
 			$('#modal').html(html);
 			$('#modal').modal('show'); 
