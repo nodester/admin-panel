@@ -149,20 +149,19 @@ app.get('/register', checkAuth, function(req, res) {
 
 
 
-// Need to write paths to all ndoester APIs
-// including GET and POST - done
-// Need to figure out REGEX - done
+// Forward requests to Nodester API
 app.all("/api/*", checkAuth, function(req, res, next) {
+	var debug = process.env.NODE_ENV === 'debug';
 	var params = "";
-	if(process.env["debug"]){
+	if (debug) {
 		console.log('a request of verb ' + req.method);
 		console.log('request params ' + req.params);
+		if (req.method === 'DELETE') return;
 	}
-	// based on verb, get params
+	// based on HTTP verb, get params
 	if (req.is_logged === true) {
 		if (req.method == "GET") {
 			params = req.query;
-
 		} else {
 			params = req.body;
 		}
@@ -171,7 +170,7 @@ app.all("/api/*", checkAuth, function(req, res, next) {
 		nodester.request(req.method, req.params[0], params, req.user.creds, function(response) {
 			res.send(response);
 		});
-	} else if(req.method==='POST' &&  req.params[0]==='user'){
+	} else if (req.method==='POST' && req.params[0] === 'user') {
 		params = req.body;
 		res.header('Content-Type', 'application/json');
 		// method, api path, data, credentials, callback
