@@ -26,10 +26,10 @@ script(id="log-tmpl", type="text/html")
 		a.close(data-dismiss="modal") x
 		h3 {{name}}
 	.modal-body
-		{{#lines}}
 		pre
+			{{#lines}}
 			{{.}}
-		{{/lines}}
+			{{/lines}}
 
 script(id="app-info-tmpl", type="text/html")
 	.modal-header
