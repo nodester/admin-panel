@@ -46,15 +46,20 @@
 		idAttribute: 'name',
 
 		initialize: function() {
-			var appStatus = this._parseRunning(this.get('running'));
-			this.set({up: appStatus[0], status: appStatus[1]});
+			this.setStatus();
+			this.on('change:running', this.setStatus, this);
 		},
-		
+
+		setStatus: function() {
+			var appStatus = this._parseRunning(this.get('running'));
+			this.set({up: appStatus[0], appStatus: appStatus[1]});
+		},
+
 		_parseRunning: function(running) {
-			if(running === undefined){
+			if (running === undefined) {
 				running = 'Application failed to start';
 			}
-			switch(running) {
+			switch (running) {
 				case 'true':
 				case true:
 					return [true, 'running'];

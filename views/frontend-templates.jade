@@ -12,7 +12,7 @@ script(id="app-tmpl", type="text/html")
 		a(href="http://{{name}}.nodester.com", target="_blank") {{name}}
 	td.port {{port}}
 	td.status <span class="label {{#up}}label-success{{/up}}
-												| {{^up}}label-important{{/up}}">{{status}}</span>
+												| {{^up}}label-important{{/up}}">{{appStatus}}</span>
 	td.actions
 		a.start(href="/app") start
 		a.stop(href="/app") stop
