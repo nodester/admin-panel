@@ -8,7 +8,8 @@
       p.buttons
           input.submit.r5.bluegrad(type="submit", value="Login")
    -if(action == "failed")
-       p#failed.msg.r5.hide Authorization Failed ! Do you have an account ?
+       p#failed.msg.r5.hide Authorization Failed ! Do you have an account? <br/> a(href="/forget") Forgot Password ?
+      
    -else if(action == "incomplete")
        p#incomplete.msg.r5.hide Either username or password was blank.
 script
