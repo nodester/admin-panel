@@ -450,10 +450,10 @@
 		
 		panel.router.navigate('/apps');
 		//HACK Until I wire it into the backbone view
-		$(".swap > span").live("click", function(e){
+		$(".swap > span").on("click", function(e){
 			$(this).hide().next().show().focus();
 		});
-		$(".swap.startfile > input").live("change", function(e){
+		$(".swap.startfile > input").on("change", function(e){
 			var $input = $(this),
 				val = $input.val(),
 				data = $input.data('params');
@@ -471,7 +471,7 @@
 			$(this).hide().prev().html(val).show();
 
 		});
-		$(".swap.envvar > input").live("change", function(e){
+		$(".swap.envvar > input").on("change", function(e){
 			var $input = $(this),
 				val = $input.val(),
 				data = $input.data('params');

@@ -1,8 +1,8 @@
 var express = require('express'),
-	cauth = require('connect-auth'),
-	auth = require('./lib/auth'),
-	encode = require('./lib/encoding')
-nodester = require('./lib/nodester-api');
+	cauth    = require('connect-auth'),
+	auth     = require('./lib/auth'),
+	encode   = require('./lib/encoding')
+	nodester = require('./lib/nodester-api');
 
 var app = module.exports = express.createServer();
 
@@ -202,6 +202,7 @@ app.get("*", checkAuth, function(req, res) {
 
 // Only listen on $ node app.js
 if (!module.parent) {
-	app.listen(process.env["port"] ? process.env["port"] : 13032);
-	console.log("Express server listening on port %d", app.address().port);
+	app.listen(process.env["port"] ? process.env["port"] : 13032, function (){
+		console.log("Express server listening on port %d", this.address().port);	
+	});
 }
